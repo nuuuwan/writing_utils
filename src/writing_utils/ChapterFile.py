@@ -88,9 +88,9 @@ class ChapterFile(File):
 
         content = "\n".join(cleaned_lines)
         content = re.sub(r"\s+$", "", content)
-
-        while "\n\n\n" in content:
-            content = content.replace("\n\n\n", "\n\n")
+        lines = content.split("\n")
+        lines = [line.strip() for line in lines if line.strip()]
+        content = "\n".join(lines)
 
         if content != original_content:
             self.write(content)
