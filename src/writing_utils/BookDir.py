@@ -12,6 +12,14 @@ log = Log("BookDir")
 
 class BookDir(FileOrDirectory):
 
+    @classmethod
+    def from_args_or_environs(cls) -> "BookDir":
+        return BookDir(
+            sys.argv[1]
+            if len(sys.argv) > 1
+            else os.environ["DIR_WRITING_DEFAULT_PROJECT_DIR"]
+        )
+
     def gen_chapter_docs(self) -> Generator[ChapterFile, None, None]:
         for file_name in os.listdir(self.path):
             if file_name.endswith(".md"):
@@ -46,11 +54,3 @@ class BookDir(FileOrDirectory):
             )
             n_renamed += 1
         log.info(f"Renamed {n_renamed} files.")
-
-    @classmethod
-    def from_args_or_environs(cls) -> "BookDir":
-        return BookDir(
-            sys.argv[1]
-            if len(sys.argv) > 1
-            else os.environ["DIR_WRITING_DEFAULT_PROJECT_DIR"]
-        )
