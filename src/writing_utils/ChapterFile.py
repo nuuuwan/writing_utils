@@ -90,7 +90,7 @@ class ChapterFile(File):
         content = re.sub(r"\s+$", "", content)
         lines = content.split("\n")
         lines = [line.strip() for line in lines if line.strip()]
-        content = "\n".join(lines)
+        content = "\n\n".join(lines)
 
         if content != original_content:
             self.write(content)
