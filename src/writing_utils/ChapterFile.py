@@ -1,3 +1,4 @@
+import re
 from functools import cached_property
 
 from utils import File, Log
@@ -73,3 +74,25 @@ class ChapterFile(File):
     @cached_property
     def n_words(self) -> int:
         return len(self.content.split())
+
+    @staticmethod
+    def __clean_line__(line: str) -> str:
+        return line.strip()
+
+    def clean(self):
+        original_content = self.read()
+        lines = original_content.split("\n")
+        cleaned_lines = [self.__clean_line__(line) for line in lines]
+
+        content = "\n".join(cleaned_lines)
+        content = re.sub(r"\s+$", "", content)
+
+        while "\n\n\n" in content:
+            content = content.replace("\n\n\n", "\n\n")
+
+        if content != original_content:
+            self.write(content)
+            log.info(f"🧹 Cleaned and Wrote {self}")
+            return True
+
+        return False
