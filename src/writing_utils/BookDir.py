@@ -1,6 +1,7 @@
 import os
 import random
 import sys
+from functools import cached_property
 from typing import Generator
 
 from utils import FileOrDirectory, Log
@@ -54,3 +55,15 @@ class BookDir(FileOrDirectory):
             )
             n_renamed += 1
         log.info(f"Renamed {n_renamed} files.")
+
+    @cached_property
+    def n_chars(self) -> int:
+        return sum(
+            [chapter_doc.n_chars for chapter_doc in self.gen_chapter_docs()]
+        )
+
+    @cached_property
+    def n_words(self) -> int:
+        return sum(
+            [chapter_doc.n_words for chapter_doc in self.gen_chapter_docs()]
+        )
