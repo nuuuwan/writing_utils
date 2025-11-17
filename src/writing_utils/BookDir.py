@@ -67,3 +67,15 @@ class BookDir(FileOrDirectory):
         return sum(
             [chapter_doc.n_words for chapter_doc in self.gen_chapter_docs()]
         )
+
+    def clean_all(self):
+        n_cleaned = 0
+        for chapter_doc in self.gen_chapter_docs():
+            if chapter_doc.clean():
+                n_cleaned += 1
+        log.info(f"🧹 Cleaned {n_cleaned} chapter files.")
+
+    def print_statistics(self):
+        log.info(f"Book directory: {self.path}")
+        log.info(f"Number of characters: {self.n_chars:,}")
+        log.info(f"Number of words: {self.n_words:,}")
