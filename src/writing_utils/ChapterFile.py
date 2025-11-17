@@ -61,3 +61,15 @@ class ChapterFile(File):
         title = self.title
         title_cleaned = title.replace(" ", "-").replace("/", "-")
         return title_cleaned.lower()
+
+    @cached_property
+    def content(self) -> str:
+        return "\n".join(self.lines)
+
+    @cached_property
+    def n_chars(self) -> int:
+        return len(self.content)
+
+    @cached_property
+    def n_words(self) -> int:
+        return len(self.content.split())
