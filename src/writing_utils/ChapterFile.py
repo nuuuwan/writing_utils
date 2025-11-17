@@ -77,7 +77,9 @@ class ChapterFile(File):
 
     @staticmethod
     def __clean_line__(line: str) -> str:
-        return line.strip()
+        line = line.strip()
+        line = line.replace("***", "---")
+        return line
 
     def clean(self):
         original_content = self.read()
