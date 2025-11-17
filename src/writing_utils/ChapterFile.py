@@ -1,3 +1,5 @@
+from functools import cached_property
+
 from utils import File, Log
 
 log = Log("ChapterFile")
@@ -5,13 +7,16 @@ log = Log("ChapterFile")
 
 class ChapterFile(File):
 
-    @property
+    @cached_property
+    def lines(self):
+        return self.read_lines()
+
+    @cached_property
     def first_line(self):
-        lines = self.read_lines()
-        first_line = lines[0]
+        first_line = self.lines[0]
         return first_line
 
-    @property
+    @cached_property
     def number_and_title(self) -> str | None:
         first_line = self.first_line
         assert first_line.startswith(
@@ -38,7 +43,11 @@ class ChapterFile(File):
         lines[0] = f"# {new_number}. {title}"
         self.write_lines(lines)
 
-    @property
+        for k in ["lines", "first_line", "number_and_title"]:
+            if k in self.__dict__:
+                del self.__dict__[k]
+
+    @cached_property
     def title(self) -> str:
         number_and_title = self.number_and_title
         assert (
@@ -47,7 +56,7 @@ class ChapterFile(File):
         title = number_and_title.split(".", 1)[1].strip()
         return title
 
-    @property
+    @cached_property
     def title_cleaned(self) -> str:
         title = self.title
         title_cleaned = title.replace(" ", "-").replace("/", "-")
