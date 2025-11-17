@@ -30,7 +30,7 @@ class BookDir(FileOrDirectory):
         name_map = {}
         for chapter_doc in self.gen_chapter_docs():
             new_file_name = (
-                f"{chapter_doc.number}-{chapter_doc.title_cleaned}.md"
+                f"{chapter_doc.number:02d}-{chapter_doc.title_cleaned}.md"
             )
             if new_file_name:
                 old_file_name = os.path.basename(chapter_doc.path)
@@ -40,7 +40,7 @@ class BookDir(FileOrDirectory):
     def randomize_titles(self):
         chapter_docs = [cd for cd in self.gen_chapter_docs()]
         random.shuffle(chapter_docs)
-        for i_chapter, chapter_doc in enumerate(chapter_docs):
+        for i_chapter, chapter_doc in enumerate(chapter_docs, start=1):
             chapter_doc.number = i_chapter
 
     def rename_files(self, name_map: dict[str, str]):
