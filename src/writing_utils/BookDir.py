@@ -48,13 +48,13 @@ class BookDir(FileOrDirectory):
         for old_file_name, new_file_name in name_map.items():
             if old_file_name == new_file_name:
                 continue
-            log.info(f"'{old_file_name}' -> '{new_file_name}'")
+            log.info(f"'    - {old_file_name}' -> '{new_file_name}'")
             os.rename(
                 os.path.join(self.path, old_file_name),
                 os.path.join(self.path, new_file_name),
             )
             n_renamed += 1
-        log.info(f"Renamed {n_renamed} files.")
+        log.info(f"↔️  Renamed {n_renamed} chapters.")
 
     @cached_property
     def n_chars(self) -> int:
@@ -73,7 +73,7 @@ class BookDir(FileOrDirectory):
         for chapter_doc in self.gen_chapter_docs():
             if chapter_doc.clean():
                 n_cleaned += 1
-        log.info(f"🧹 Cleaned {n_cleaned} chapter files.")
+        log.info(f"🧹 Cleaned {n_cleaned} chapters.")
 
     def print_statistics(self):
         os.system(f'open "{self.path}"')
