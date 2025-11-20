@@ -76,6 +76,6 @@ class BookDir(FileOrDirectory):
         log.info(f"🧹 Cleaned {n_cleaned} chapter files.")
 
     def print_statistics(self):
-        log.info(f"Book directory: {self.path}")
-        log.info(f"Number of characters: {self.n_chars:,}")
-        log.info(f"Number of words: {self.n_words:,}")
+        os.system(f'open "{self.path}"')
+        log.info(f"n_chars={self.n_chars:,}")
+        log.info(f"n_words={self.n_words:,}")
