@@ -12,6 +12,12 @@ class ChapterFile(File):
     def lines(self):
         return self.read_lines()
 
+    def __str__(self):
+        return (
+            f"{self.path} ({self.size_humanized},"
+            + f" {self.n_chars:,}c, {self.n_words:,}w)"
+        )
+
     @cached_property
     def first_line(self):
         first_line = self.lines[0]
