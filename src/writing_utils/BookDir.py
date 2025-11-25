@@ -79,3 +79,6 @@ class BookDir(FileOrDirectory):
         os.system(f'open "{self.path}"')
         log.info(f"n_chars={self.n_chars:,}")
         log.info(f"n_words={self.n_words:,}")
+
+    def open(self):
+        os.system(f'open "{self.path}"')
