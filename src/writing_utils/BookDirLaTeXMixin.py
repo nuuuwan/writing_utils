@@ -19,8 +19,7 @@ class BookDirLaTeXMixin:
         self.__add_chapters_to_document__(doc)
 
         doc.generate_pdf(output_path, clean_tex=False)
-        log.info(f"📄 Generated LaTeX/PDF at {output_path}.pdf")
-
+        log.info(f"📄 Wrote {output_path}.pdf")
         return doc
 
     def __create_latex_directory__(self) -> str:
@@ -79,9 +78,7 @@ class BookDirLaTeXMixin:
         chapters = sorted(self.gen_chapter_docs(), key=lambda ch: ch.number)
 
         for chapter_doc in chapters:
-            log.info(
-                f"Adding chapter {chapter_doc.number}: {chapter_doc.title}"
-            )
+            log.debug(f"Added {chapter_doc.number_and_title}")
             self.__add_chapter_section__(doc, chapter_doc)
 
     def __add_chapter_section__(self, doc: Document, chapter_doc):
