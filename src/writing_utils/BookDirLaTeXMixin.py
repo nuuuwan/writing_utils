@@ -28,7 +28,9 @@ class BookDirLaTeXMixin:
         return latex_dir
 
     def __create_document__(self) -> Document:
-        doc = Document(documentclass="book", document_options=["a4paper"])
+        doc = Document(
+            documentclass="book", document_options=["a4paper", "12pt"]
+        )
 
         self.__configure_page_layout__(doc)
         self.__add_title_page__(doc)
