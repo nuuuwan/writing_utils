@@ -52,8 +52,11 @@ class BookDirLaTeXMixin:
         doc.preamble.append(NoEscape(chapter_format))
 
     def __add_title_page__(self, doc: Document):
-        doc.preamble.append(Command("title", data.TITLE))
-        doc.preamble.append(Command("author", data.AUTHOR))
+
+        title_with_subtitle = data.TITLE + r"\\" + r"\large " + data.SUBTITLE
+        doc.preamble.append(Command("title", NoEscape(title_with_subtitle)))
+
+        doc.preamble.append(Command("author", "By " + data.AUTHOR))
         doc.preamble.append(Command("date", NoEscape(r"\today")))
 
         doc.append(NoEscape(r"\maketitle"))
