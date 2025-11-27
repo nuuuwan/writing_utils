@@ -108,7 +108,6 @@ class BookDirLaTeXMixin:
         chapters = sorted(self.gen_chapter_docs(), key=lambda ch: ch.number)
 
         for chapter_doc in chapters:
-            log.debug(f"Added {chapter_doc.number_and_title}")
             self.__add_chapter_section__(doc, chapter_doc)
 
     def __add_chapter_section__(self, doc: Document, chapter_doc):
