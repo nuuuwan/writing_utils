@@ -12,7 +12,7 @@ log = Log("BookDir")
 
 
 class BookDir(FileOrDirectory):
-
+    # Construction
     @classmethod
     def from_args_or_environs(cls) -> "BookDir":
         return BookDir(
@@ -21,6 +21,7 @@ class BookDir(FileOrDirectory):
             else os.environ["DIR_WRITING_DEFAULT_PROJECT_DIR"]
         )
 
+    # Data Access
     def gen_chapter_docs(self) -> Generator[ChapterFile, None, None]:
         for file_name in os.listdir(self.path):
             if file_name.endswith(".md"):
@@ -37,11 +38,26 @@ class BookDir(FileOrDirectory):
                 name_map[old_file_name] = new_file_name
         return name_map
 
-    def randomize_titles(self):
-        chapter_docs = [cd for cd in self.gen_chapter_docs()]
-        random.shuffle(chapter_docs)
-        for i_chapter, chapter_doc in enumerate(chapter_docs, start=1):
-            chapter_doc.number = i_chapter
+    # Properties
+    @cached_property
+    def n_chars(self) -> int:
+        return sum(
+            [chapter_doc.n_chars for chapter_doc in self.gen_chapter_docs()]
+        )
+
+    @cached_property
+    def n_words(self) -> int:
+        return sum(
+            [chapter_doc.n_words for chapter_doc in self.gen_chapter_docs()]
+        )
+
+    # Actions
+    def clean_all(self):
+        n_cleaned = 0
+        for chapter_doc in self.gen_chapter_docs():
+            if chapter_doc.clean():
+                n_cleaned += 1
+        log.info(f"🧹 Cleaned {n_cleaned} chapters.")
 
     def rename_files(self, name_map: dict[str, str]):
         n_renamed = 0
@@ -56,27 +72,14 @@ class BookDir(FileOrDirectory):
             n_renamed += 1
         log.info(f"↔️  Renamed {n_renamed} chapters.")
 
-    @cached_property
-    def n_chars(self) -> int:
-        return sum(
-            [chapter_doc.n_chars for chapter_doc in self.gen_chapter_docs()]
-        )
+    def randomize_titles(self):
+        chapter_docs = [cd for cd in self.gen_chapter_docs()]
+        random.shuffle(chapter_docs)
+        for i_chapter, chapter_doc in enumerate(chapter_docs, start=1):
+            chapter_doc.number = i_chapter
 
-    @cached_property
-    def n_words(self) -> int:
-        return sum(
-            [chapter_doc.n_words for chapter_doc in self.gen_chapter_docs()]
-        )
-
-    def clean_all(self):
-        n_cleaned = 0
-        for chapter_doc in self.gen_chapter_docs():
-            if chapter_doc.clean():
-                n_cleaned += 1
-        log.info(f"🧹 Cleaned {n_cleaned} chapters.")
-
+    # Utilities
     def print_statistics(self):
-        os.system(f'open "{self.path}"')
         log.info(f"n_chars={self.n_chars:,}")
         log.info(f"n_words={self.n_words:,}")
 
