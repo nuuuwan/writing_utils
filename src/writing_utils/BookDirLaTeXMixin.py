@@ -51,6 +51,15 @@ class BookDirLaTeXMixin:
         )
         doc.preamble.append(NoEscape(chapter_format))
 
+        sectionbreak_command = (
+            r"\newcommand{\sectionbreak}{%" + "\n"
+            r"  \par\bigskip" + "\n"
+            r"  \centerline{\large ...}" + "\n"
+            r"  \bigskip\par" + "\n"
+            r"}"
+        )
+        doc.preamble.append(NoEscape(sectionbreak_command))
+
     def __add_title_page__(self, doc: Document):
 
         title_with_subtitle = data.TITLE + r"\\" + r"\large " + data.SUBTITLE
@@ -128,5 +137,7 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_rules_and_paragraphs__(content: str) -> str:
-        content = re.sub(r"^---+$", r"\\hrule", content, flags=re.MULTILINE)
+        content = re.sub(
+            r"^---+$", r"\\sectionbreak", content, flags=re.MULTILINE
+        )
         return content
