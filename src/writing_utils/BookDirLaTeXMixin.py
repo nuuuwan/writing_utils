@@ -129,5 +129,4 @@ class BookDirLaTeXMixin:
     @staticmethod
     def __convert_rules_and_paragraphs__(content: str) -> str:
         content = re.sub(r"^---+$", r"\\hrule", content, flags=re.MULTILINE)
-        content = re.sub(r"\n\n+", r"\n\n\\par\n", content)
         return content
