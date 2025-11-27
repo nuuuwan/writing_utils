@@ -11,6 +11,13 @@ log = Log("BookDirLaTeXMixin")
 
 
 class BookDirLaTeXMixin:
+    def open_latex(self):
+        latex_dir = self.__create_latex_directory__()
+        os.system(f'open "{latex_dir}"')
+        pdf_path = os.path.join(latex_dir, "book.pdf")
+        pdf_path = os.path.join(latex_dir, "book.tex")
+        os.system(f'open "{pdf_path}"')
+
     def build_latex(self) -> Document:
         latex_dir = self.__create_latex_directory__()
         output_path = os.path.join(latex_dir, "book")
@@ -133,12 +140,8 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_quotes__(content: str) -> str:
-        content = re.sub(
-            r'"([^"]+?)"', r"\\say{\1}", content, flags=re.DOTALL
-        )
-        content = re.sub(
-            r'“([^"]+?)”', r"\\say{\1}", content, flags=re.DOTALL
-        )
+        content = re.sub(r'"([^"]+?)"', r"\\say{\1}", content, flags=re.DOTALL)
+        content = re.sub(r'“([^"]+?)”', r"\\say{\1}", content, flags=re.DOTALL)
 
         return content
 
