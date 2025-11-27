@@ -121,10 +121,30 @@ class BookDirLaTeXMixin:
     def __convert_markdown_to_latex__(content: str) -> str:
         content = BookDirLaTeXMixin.__escape_special_chars__(content)
         content = BookDirLaTeXMixin.__normalize_punctuation__(content)
+        content = BookDirLaTeXMixin.__fix_spacing__(content)
         content = BookDirLaTeXMixin.__convert_quotes__(content)
         content = BookDirLaTeXMixin.__convert_text_formatting__(content)
         content = BookDirLaTeXMixin.__convert_headers__(content)
         content = BookDirLaTeXMixin.__convert_rules_and_paragraphs__(content)
+        return content
+
+    @staticmethod
+    def __fix_spacing__(content: str) -> str:
+        # Fix abbreviations: add \  after common abbreviations
+        abbrevs = [
+            "Mr",
+            "Mrs",
+            "Ms",
+            "Dr",
+            "Prof",
+            "Sr",
+            "Jr",
+            "vs",
+            "etc",
+            "PS",
+        ]
+        for abbrev in abbrevs:
+            content = re.sub(rf"\b{abbrev}\.\s+", rf"{abbrev}.\\ ", content)
         return content
 
     @staticmethod
