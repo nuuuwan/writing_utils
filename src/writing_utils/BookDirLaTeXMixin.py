@@ -135,6 +135,10 @@ class BookDirLaTeXMixin:
         # Convert em-dash and en-dash
         content = content.replace("\u2014", "---")  # — → ---
         content = content.replace("\u2013", "--")  # – → --
+        # Convert hyphen surrounded by spaces to em-dash
+        content = re.sub(r" - ", r"---", content)
+        # Convert hyphen at start/end of dialogue to em-dash
+        content = re.sub(r"(\s)-(\w)", r"\1---\2", content)
         return content
 
     @staticmethod
