@@ -57,9 +57,9 @@ class BookDirLaTeXMixin:
 
         sectionbreak_command = (
             r"\newcommand{\sectionbreak}{%" + "\n"
-            r"  \par\bigskip" + "\n"
-            r"  \centerline{\large \ldots}" + "\n"
-            r"  \bigskip\par" + "\n"
+            r"  \par\bigskip%" + "\n"
+            r"  \centerline{\large\ldots}%" + "\n"
+            r"  \bigskip\par%" + "\n"
             r"}"
         )
         doc.preamble.append(NoEscape(sectionbreak_command))
@@ -157,6 +157,6 @@ class BookDirLaTeXMixin:
     @staticmethod
     def __convert_rules_and_paragraphs__(content: str) -> str:
         content = re.sub(
-            r"^---+$", r"\\sectionbreak", content, flags=re.MULTILINE
+            r"^---+$", r"\\sectionbreak{}", content, flags=re.MULTILINE
         )
         return content
