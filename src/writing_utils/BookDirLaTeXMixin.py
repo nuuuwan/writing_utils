@@ -5,6 +5,8 @@ from pylatex import Command, Document, Section
 from pylatex.utils import NoEscape
 from utils import Log
 
+from private import data
+
 log = Log("BookDirLaTeXMixin")
 
 
@@ -45,8 +47,8 @@ class BookDirLaTeXMixin:
         doc.preamble.append(NoEscape(r"\renewcommand{\headrulewidth}{0pt}"))
 
     def __add_title_page__(self, doc: Document):
-        doc.preamble.append(Command("title", "Book"))
-        doc.preamble.append(Command("author", "Author Name"))
+        doc.preamble.append(Command("title", data.TITLE))
+        doc.preamble.append(Command("author", data.AUTHOR))
         doc.preamble.append(Command("date", NoEscape(r"\today")))
 
         doc.append(NoEscape(r"\maketitle"))
@@ -62,15 +64,13 @@ class BookDirLaTeXMixin:
         doc.append(NoEscape(r"\vspace*{\fill}"))
         doc.append(NoEscape(r"\begin{center}"))
         copyright_line = (
-            r"Copyright \textcopyright\ \the\year\ by Author Name\\"
+            r"Copyright \textcopyright\ \the\year\ by " + data.AUTHOR + r"\\"
         )
         doc.append(NoEscape(copyright_line))
         doc.append(NoEscape(r"\vspace{1em}"))
         doc.append(NoEscape(r"All rights reserved.\\"))
         doc.append(NoEscape(r"\vspace{1em}"))
-        doc.append(NoEscape(r"ISBN: [To be assigned]\\"))
-        doc.append(NoEscape(r"\vspace{1em}"))
-        doc.append(NoEscape(r"Publisher/Printer: [Publisher Name]\\"))
+        doc.append(NoEscape(r"Publisher/Printer: \\" + data.AUTHOR))
         doc.append(NoEscape(r"\end{center}"))
         doc.append(NoEscape(r"\vspace*{\fill}"))
         doc.append(NoEscape(r"\newpage"))
