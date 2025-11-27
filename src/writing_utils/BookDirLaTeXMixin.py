@@ -114,10 +114,21 @@ class BookDirLaTeXMixin:
     @staticmethod
     def __convert_markdown_to_latex__(content: str) -> str:
         content = BookDirLaTeXMixin.__escape_special_chars__(content)
+        content = BookDirLaTeXMixin.__normalize_punctuation__(content)
         content = BookDirLaTeXMixin.__convert_quotes__(content)
         content = BookDirLaTeXMixin.__convert_text_formatting__(content)
         content = BookDirLaTeXMixin.__convert_headers__(content)
         content = BookDirLaTeXMixin.__convert_rules_and_paragraphs__(content)
+        return content
+
+    @staticmethod
+    def __normalize_punctuation__(content: str) -> str:
+        # Convert curly apostrophes to straight apostrophes
+        content = content.replace("\u2019", "'")  # ' → '
+        content = content.replace("\u2018", "'")  # ' → '
+        # Convert em-dash and en-dash
+        content = content.replace("\u2014", "---")  # — → ---
+        content = content.replace("\u2013", "--")  # – → --
         return content
 
     @staticmethod
