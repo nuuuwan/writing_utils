@@ -121,10 +121,22 @@ class BookDirLaTeXMixin:
     def __convert_markdown_to_latex__(content: str) -> str:
         content = BookDirLaTeXMixin.__escape_special_chars__(content)
         content = BookDirLaTeXMixin.__normalize_punctuation__(content)
+        content = BookDirLaTeXMixin.__fix_intersentence_spacing__(content)
         content = BookDirLaTeXMixin.__convert_quotes__(content)
         content = BookDirLaTeXMixin.__convert_text_formatting__(content)
         content = BookDirLaTeXMixin.__convert_headers__(content)
         content = BookDirLaTeXMixin.__convert_rules_and_paragraphs__(content)
+        return content
+
+    @staticmethod
+    def __fix_intersentence_spacing__(content: str) -> str:
+        # Add \@ before periods ending sentences when followed by uppercase
+        # Excludes common abbreviations like Mr., Mrs., Dr., etc.
+        content = re.sub(
+            r"(?<!Mr)(?<!Mrs)(?<!Ms)(?<!Dr)(?<!Prof)\.\s+([A-Z])",
+            r".\@ \1",
+            content,
+        )
         return content
 
     @staticmethod
