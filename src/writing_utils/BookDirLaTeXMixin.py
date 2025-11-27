@@ -53,6 +53,7 @@ class BookDirLaTeXMixin:
             r"{\normalfont\huge\bfseries}{\thechapter.}{1em}{}"
         )
         doc.preamble.append(NoEscape(chapter_format))
+        doc.preamble.append(NoEscape(r"\usepackage[dvipsnames]{xcolor}"))
 
         sectionbreak_command = (
             r"\newcommand{\sectionbreak}{%" + "\n"
@@ -63,7 +64,7 @@ class BookDirLaTeXMixin:
         )
         doc.preamble.append(NoEscape(sectionbreak_command))
 
-        say_command = r"\newcommand{\say}[1]{\enquote{#1}}"
+        say_command = r"\newcommand{\say}[1]{{\enquote{#1}}}"
         doc.preamble.append(NoEscape(say_command))
 
     def __add_title_page__(self, doc: Document):
@@ -121,12 +122,8 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_quotes__(content: str) -> str:
-        content = re.sub(
-            r'"([^"]+?)"', r"\\say{\1}", content, flags=re.DOTALL
-        )
-        content = re.sub(
-            r'“([^"]+?)”', r"\\say{\1}", content, flags=re.DOTALL
-        )
+        content = re.sub(r'"([^"]+?)"', r"\\say{\1}", content, flags=re.DOTALL)
+        content = re.sub(r'“([^"]+?)”', r"\\say{\1}", content, flags=re.DOTALL)
 
         return content
 
