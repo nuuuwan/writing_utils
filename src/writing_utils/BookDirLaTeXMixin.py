@@ -41,6 +41,7 @@ class BookDirLaTeXMixin:
         doc.preamble.append(NoEscape(r"\usepackage[margin=1in]{geometry}"))
         doc.preamble.append(NoEscape(r"\usepackage{setspace}"))
         doc.preamble.append(NoEscape(r"\doublespacing"))
+        doc.preamble.append(NoEscape(r"\usepackage{csquotes}"))
         doc.preamble.append(NoEscape(r"\usepackage{fancyhdr}"))
         doc.preamble.append(NoEscape(r"\pagestyle{fancy}"))
         doc.preamble.append(NoEscape(r"\fancyhf{}"))
@@ -108,10 +109,16 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_markdown_to_latex__(content: str) -> str:
+        content = BookDirLaTeXMixin.__convert_quotes__(content)
         content = BookDirLaTeXMixin.__convert_text_formatting__(content)
         content = BookDirLaTeXMixin.__convert_headers__(content)
         content = BookDirLaTeXMixin.__escape_special_chars__(content)
         content = BookDirLaTeXMixin.__convert_rules_and_paragraphs__(content)
+        return content
+
+    @staticmethod
+    def __convert_quotes__(content: str) -> str:
+        content = re.sub(r'"([^"]+)"', r"\\enquote{\1}", content)
         return content
 
     @staticmethod
