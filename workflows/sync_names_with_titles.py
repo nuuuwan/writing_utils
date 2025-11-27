@@ -6,3 +6,4 @@ if __name__ == "__main__":
     book_dir.rename_files(name_map=book_dir.get_name_map_from_titles())
     book_dir.print_statistics()
     book_dir.open()
+    book_dir.build_latex()
