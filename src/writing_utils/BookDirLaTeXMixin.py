@@ -63,6 +63,9 @@ class BookDirLaTeXMixin:
         )
         doc.preamble.append(NoEscape(sectionbreak_command))
 
+        say_command = r"\newcommand{\say}[1]{\enquote{#1}}"
+        doc.preamble.append(NoEscape(say_command))
+
     def __add_title_page__(self, doc: Document):
 
         title_with_subtitle = data.TITLE + r"\\" + r"\large " + data.SUBTITLE
@@ -109,16 +112,22 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_markdown_to_latex__(content: str) -> str:
+        content = BookDirLaTeXMixin.__escape_special_chars__(content)
         content = BookDirLaTeXMixin.__convert_quotes__(content)
         content = BookDirLaTeXMixin.__convert_text_formatting__(content)
         content = BookDirLaTeXMixin.__convert_headers__(content)
-        content = BookDirLaTeXMixin.__escape_special_chars__(content)
         content = BookDirLaTeXMixin.__convert_rules_and_paragraphs__(content)
         return content
 
     @staticmethod
     def __convert_quotes__(content: str) -> str:
-        content = re.sub(r'"([^"]+)"', r"\\enquote{\1}", content)
+        content = re.sub(
+            r'"([^"]+?)"', r"\\say{\1}", content, flags=re.DOTALL
+        )
+        content = re.sub(
+            r'“([^"]+?)”', r"\\say{\1}", content, flags=re.DOTALL
+        )
+
         return content
 
     @staticmethod
