@@ -58,7 +58,7 @@ class BookDirLaTeXMixin:
         sectionbreak_command = (
             r"\newcommand{\sectionbreak}{%" + "\n"
             r"  \par\bigskip" + "\n"
-            r"  \centerline{\large ...}" + "\n"
+            r"  \centerline{\large \ldots}" + "\n"
             r"  \bigskip\par" + "\n"
             r"}"
         )
@@ -122,8 +122,12 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_quotes__(content: str) -> str:
-        content = re.sub(r'"([^"]+?)"', r"\\say{\1}", content, flags=re.DOTALL)
-        content = re.sub(r'“([^"]+?)”', r"\\say{\1}", content, flags=re.DOTALL)
+        content = re.sub(
+            r'"([^"]+?)"', r"\\say{\1}", content, flags=re.DOTALL
+        )
+        content = re.sub(
+            r'“([^"]+?)”', r"\\say{\1}", content, flags=re.DOTALL
+        )
 
         return content
 
