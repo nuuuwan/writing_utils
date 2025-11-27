@@ -1,7 +1,7 @@
 import os
 import re
 
-from pylatex import Command, Document, Section
+from pylatex import Chapter, Command, Document
 from pylatex.utils import NoEscape
 from utils import Log
 
@@ -44,6 +44,12 @@ class BookDirLaTeXMixin:
         doc.preamble.append(NoEscape(r"\fancyhf{}"))
         doc.preamble.append(NoEscape(r"\fancyfoot[C]{\thepage}"))
         doc.preamble.append(NoEscape(r"\renewcommand{\headrulewidth}{0pt}"))
+        doc.preamble.append(NoEscape(r"\usepackage{titlesec}"))
+        chapter_format = (
+            r"\titleformat{\chapter}[hang]"
+            r"{\normalfont\huge\bfseries}{\thechapter.}{1em}{}"
+        )
+        doc.preamble.append(NoEscape(chapter_format))
 
     def __add_title_page__(self, doc: Document):
         doc.preamble.append(Command("title", data.TITLE))
@@ -80,7 +86,7 @@ class BookDirLaTeXMixin:
             self.__add_chapter_section__(doc, chapter_doc)
 
     def __add_chapter_section__(self, doc: Document, chapter_doc):
-        with doc.create(Section(chapter_doc.title, numbering=True)):
+        with doc.create(Chapter(chapter_doc.title, numbering=True)):
             lines = chapter_doc.lines[1:]
             content = "\n".join(lines).strip()
             content = self.__convert_markdown_to_latex__(content)
