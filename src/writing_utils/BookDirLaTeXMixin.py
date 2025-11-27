@@ -68,8 +68,6 @@ class BookDirLaTeXMixin:
         doc.append(NoEscape(copyright_line))
         doc.append(NoEscape(r"\vspace{1em}"))
         doc.append(NoEscape(r"All rights reserved.\\"))
-        doc.append(NoEscape(r"\vspace{1em}"))
-        doc.append(NoEscape(r"Publisher/Printer: \\" + data.AUTHOR))
         doc.append(NoEscape(r"\end{center}"))
         doc.append(NoEscape(r"\vspace*{\fill}"))
         doc.append(NoEscape(r"\newpage"))
