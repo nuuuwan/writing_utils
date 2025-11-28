@@ -58,3 +58,15 @@ class BookDir(FileOrDirectory, BookDirUtilsMixin, BookDirLaTeXMixin):
         for chapter_doc in self.gen_chapter_docs():
             for find_info in chapter_doc.find(search_key):
                 yield find_info
+
+    def replace(self, find_text: str, replace_text: str):
+        n_replace_files = 0
+        for chapter_doc in self.gen_chapter_docs():
+            if chapter_doc.replace(find_text, replace_text):
+                n_replace_files += 1
+
+        log.info(
+            f'Replaced "{find_text}" with "{replace_text}"'
+            + f" in {n_replace_files} chapters."
+        )
+        return n_replace_files > 0
