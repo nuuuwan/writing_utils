@@ -19,6 +19,8 @@ class BookDir(FileOrDirectory, BookDirUtilsMixin, BookDirLaTeXMixin):
         return BookDir(
             sys.argv[1]
             if len(sys.argv) > 1
+            and os.path.exists(sys.argv[1])
+            and os.path.isdir(sys.argv[1])
             else os.environ["DIR_WRITING_DEFAULT_PROJECT_DIR"]
         )
 
