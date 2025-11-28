@@ -113,3 +113,14 @@ class ChapterFile(File):
                     i_line=i_line,
                     line=line,
                 )
+
+    def replace(self, find_text: str, replace_text: str):
+        assert find_text, "Find text must not be empty"
+        assert replace_text, "Replace text must not be empty"
+        original_content = self.read()
+        content = original_content.replace(find_text, replace_text)
+        if original_content == content:
+            return False
+        self.write(content)
+        log.info(f'Replaced "{find_text}" with "{replace_text}" in {self}')
+        return True
