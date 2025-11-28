@@ -51,3 +51,8 @@ class BookDir(FileOrDirectory, BookDirUtilsMixin, BookDirLaTeXMixin):
         return sum(
             [chapter_doc.n_words for chapter_doc in self.gen_chapter_docs()]
         )
+
+    def find(self, search_key: str):
+        for chapter_doc in self.gen_chapter_docs():
+            for find_info in chapter_doc.find(search_key):
+                yield find_info
