@@ -9,3 +9,4 @@ if __name__ == "__main__":
     book_dir.build_latex()
     book_dir.open_latex()
     book_dir.open()
+    book_dir.backup()
