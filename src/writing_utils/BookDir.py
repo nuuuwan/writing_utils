@@ -1,9 +1,10 @@
 import os
+import shutil
 import sys
 from functools import cached_property
 from typing import Generator
 
-from utils import FileOrDirectory, Log
+from utils import FileOrDirectory, Log, Time, TimeFormat
 
 from writing_utils.BookDirLaTeXMixin import BookDirLaTeXMixin
 from writing_utils.BookDirUtilsMixin import BookDirUtilsMixin
@@ -70,3 +71,9 @@ class BookDir(FileOrDirectory, BookDirUtilsMixin, BookDirLaTeXMixin):
             + f" in {n_replace_files} chapters."
         )
         return n_replace_files > 0
+
+    def backup(self):
+        ts = TimeFormat.TIME_ID.format(Time.now())
+        backup_dir_path = f"{self.path}.backup.{ts}"
+        shutil.copytree(self.path, backup_dir_path)
+        log.info(f"Wrote {backup_dir_path}")
