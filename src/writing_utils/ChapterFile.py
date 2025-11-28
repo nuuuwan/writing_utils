@@ -104,3 +104,12 @@ class ChapterFile(File):
             return True
 
         return False
+
+    def find(self, search_key: str):
+        for i_line, line in enumerate(self.lines):
+            if search_key in line:
+                yield dict(
+                    number_and_title=self.number_and_title,
+                    i_line=i_line,
+                    line=line,
+                )
