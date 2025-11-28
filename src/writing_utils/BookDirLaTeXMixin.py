@@ -13,9 +13,7 @@ log = Log("BookDirLaTeXMixin")
 class BookDirLaTeXMixin:
     def open_latex(self):
         latex_dir = self.__create_latex_directory__()
-        os.system(f'open "{latex_dir}"')
         pdf_path = os.path.join(latex_dir, "book.pdf")
-        pdf_path = os.path.join(latex_dir, "book.tex")
         os.system(f'open "{pdf_path}"')
 
     def build_latex(self) -> Document:
@@ -131,7 +129,7 @@ class BookDirLaTeXMixin:
     @staticmethod
     def __fix_spacing__(content: str) -> str:
         # Fix abbreviations: add \  after common abbreviations
-        abbrevs = [
+        for abbrev in [
             "Mr",
             "Mrs",
             "Ms",
@@ -141,10 +139,9 @@ class BookDirLaTeXMixin:
             "Jr",
             "vs",
             "etc",
-            "PS",
-        ]
-        for abbrev in abbrevs:
+        ]:
             content = re.sub(rf"\b{abbrev}\.\s+", rf"{abbrev}.\\ ", content)
+
         return content
 
     @staticmethod
