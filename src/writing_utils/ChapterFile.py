@@ -87,10 +87,10 @@ class ChapterFile(File):
         line = line.replace("***", "---")
         return line
 
-    def get_cleaned(self):
-        original_content = self.read()
+    @staticmethod
+    def get_cleaned(original_content):
         lines = original_content.split("\n")
-        cleaned_lines = [self.__clean_line__(line) for line in lines]
+        cleaned_lines = [ChapterFile.__clean_line__(line) for line in lines]
 
         content = "\n".join(cleaned_lines)
         content = re.sub(r"\s+$", "", content)
@@ -98,10 +98,11 @@ class ChapterFile(File):
         lines = [line.strip() for line in lines if line.strip()]
         content = "\n\n".join(lines)
 
-        return original_content, content
+        return content
 
     def clean_and_write(self):
-        original_content, content = self.get_cleaned()
+        original_content = self.read()
+        content = self.get_cleaned(original_content)
         if content != original_content:
             self.write(content)
             log.info(f"🧹 Cleaned and Wrote {self}")
