@@ -124,3 +124,8 @@ class ChapterFile(File):
         self.write(content)
         log.info(f'Replaced "{find_text}" with "{replace_text}" in {self}')
         return True
+
+    def __eq__(self, other):
+        if not isinstance(other, ChapterFile):
+            return False
+        return self.content == other.content

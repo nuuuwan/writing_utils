@@ -8,6 +8,7 @@ from utils import FileOrDirectory, Log, Time, TimeFormat
 
 from writing_utils.BookDirDocXMixin import BookDirDocXMixin
 from writing_utils.BookDirLaTeXMixin import BookDirLaTeXMixin
+from writing_utils.BookDirReverseDocXMixin import BookDirReverseDocXMixin
 from writing_utils.BookDirUtilsMixin import BookDirUtilsMixin
 from writing_utils.ChapterFile import ChapterFile
 
@@ -15,7 +16,11 @@ log = Log("BookDir")
 
 
 class BookDir(
-    FileOrDirectory, BookDirUtilsMixin, BookDirLaTeXMixin, BookDirDocXMixin
+    FileOrDirectory,
+    BookDirUtilsMixin,
+    BookDirLaTeXMixin,
+    BookDirDocXMixin,
+    BookDirReverseDocXMixin,
 ):
     # Construction
     @classmethod
@@ -80,3 +85,19 @@ class BookDir(
         backup_dir_path = f"{self.path}.backup.{ts}"
         shutil.copytree(self.path, backup_dir_path)
         log.info(f"Wrote {backup_dir_path}")
+
+    def __eq__(self, other):
+        if not isinstance(other, BookDir):
+            return False
+
+        self_chapters = list(self.gen_chapter_docs())
+        other_chapters = list(other.gen_chapter_docs())
+
+        if len(self_chapters) != len(other_chapters):
+            return False
+
+        for self_chapter, other_chapter in zip(self_chapters, other_chapters):
+            if self_chapter.content != other_chapter.content:
+                return False
+
+        return True

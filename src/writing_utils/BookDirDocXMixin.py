@@ -96,7 +96,9 @@ class BookDirDocXMixin:
 
         copyright_notice = doc.add_paragraph()
         copyright_notice.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        copyright_notice_run = copyright_notice.add_run("All rights reserved.")
+        copyright_notice_run = copyright_notice.add_run(
+            "All rights reserved."
+        )
         copyright_notice_run.font.size = Pt(10)
 
         doc.add_page_break()
@@ -108,7 +110,8 @@ class BookDirDocXMixin:
             self.__add_docx_chapter_section__(doc, chapter_doc)
 
     def __add_docx_chapter_section__(self, doc: Document, chapter_doc):
-        doc.add_heading(chapter_doc.title, level=1)
+        chapter_heading = f"{chapter_doc.number}. {chapter_doc.title}"
+        doc.add_heading(chapter_heading, level=1)
         lines = chapter_doc.lines[1:]
         content = "\n".join(lines).strip()
         self.__convert_markdown_to_docx__(content, doc)
@@ -239,7 +242,9 @@ class BookDirDocXMixin:
 
     @staticmethod
     def __convert_quotes__(content: str) -> str:
-        content = re.sub(r'"([^"]+?)"', r"\\say{\1}", content, flags=re.DOTALL)
+        content = re.sub(
+            r'"([^"]+?)"', r"\\say{\1}", content, flags=re.DOTALL
+        )
         content = re.sub(
             r'[""]([^""]+?)[""]', r"\\say{\1}", content, flags=re.DOTALL
         )
