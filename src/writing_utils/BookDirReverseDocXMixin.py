@@ -4,6 +4,8 @@ import re
 from docx import Document
 from utils import File, Log
 
+from writing_utils.ChapterFile import ChapterFile
+
 log = Log("BookDirReverseDocXMixin")
 
 
@@ -31,7 +33,6 @@ class BookDirReverseDocXMixin:
         cls._save_chapters_to_files(chapters, temp_dir)
 
         book_dir = cls(temp_dir)
-        book_dir.clean_and_write_all()
         log.info(f"📖 Loaded BookDir from {docx_path}")
         return book_dir
 
@@ -83,4 +84,5 @@ class BookDirReverseDocXMixin:
         for chapter_num, (title, content) in sorted(chapters.items()):
             filename = f"{chapter_num:02d}-{title.replace(' ', '_')}.md"
             filepath = os.path.join(temp_dir, filename)
-            File(filepath).write(content)
+            cleaned_content = ChapterFile.get_cleaned(content)
+            File(filepath).write(cleaned_content)
