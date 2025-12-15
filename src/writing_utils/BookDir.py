@@ -6,6 +6,7 @@ from typing import Generator
 
 from utils import FileOrDirectory, Log, Time, TimeFormat
 
+from writing_utils.BookDirDocXMixin import BookDirDocXMixin
 from writing_utils.BookDirLaTeXMixin import BookDirLaTeXMixin
 from writing_utils.BookDirUtilsMixin import BookDirUtilsMixin
 from writing_utils.ChapterFile import ChapterFile
@@ -13,7 +14,9 @@ from writing_utils.ChapterFile import ChapterFile
 log = Log("BookDir")
 
 
-class BookDir(FileOrDirectory, BookDirUtilsMixin, BookDirLaTeXMixin):
+class BookDir(
+    FileOrDirectory, BookDirUtilsMixin, BookDirLaTeXMixin, BookDirDocXMixin
+):
     # Construction
     @classmethod
     def from_args_or_environs(cls) -> "BookDir":

@@ -20,8 +20,8 @@ class BookDirLaTeXMixin:
         latex_dir = self.__create_latex_directory__()
         output_path = os.path.join(latex_dir, "book")
 
-        doc = self.__create_document__()
-        self.__add_chapters_to_document__(doc)
+        doc = self.__create_latex_document__()
+        self.__add_chapters_to_latex_document__(doc)
 
         doc.generate_pdf(output_path, clean_tex=False)
         log.info(f"📄 Wrote {output_path}.pdf")
@@ -32,17 +32,17 @@ class BookDirLaTeXMixin:
         os.makedirs(latex_dir, exist_ok=True)
         return latex_dir
 
-    def __create_document__(self) -> Document:
+    def __create_latex_document__(self) -> Document:
         doc = Document(
             documentclass="book", document_options=["a4paper", "12pt"]
         )
 
-        self.__configure_page_layout__(doc)
-        self.__add_title_page__(doc)
+        self.__configure_latex_page_layout__(doc)
+        self.__add_latex_title_page__(doc)
 
         return doc
 
-    def __configure_page_layout__(self, doc: Document):
+    def __configure_latex_page_layout__(self, doc: Document):
         doc.preamble.append(NoEscape(r"\usepackage[margin=1in]{geometry}"))
         doc.preamble.append(NoEscape(r"\usepackage{setspace}"))
         doc.preamble.append(NoEscape(r"\doublespacing"))
@@ -72,7 +72,7 @@ class BookDirLaTeXMixin:
         say_command = r"\newcommand{\say}[1]{{\enquote{#1}}}"
         doc.preamble.append(NoEscape(say_command))
 
-    def __add_title_page__(self, doc: Document):
+    def __add_latex_title_page__(self, doc: Document):
 
         title_with_subtitle = data.TITLE + r"\\" + r"\large " + data.SUBTITLE
         doc.preamble.append(Command("title", NoEscape(title_with_subtitle)))
@@ -83,12 +83,12 @@ class BookDirLaTeXMixin:
         doc.append(NoEscape(r"\maketitle"))
         doc.append(NoEscape(r"\newpage"))
 
-        self.__add_copyright_page__(doc)
+        self.__add_latex_copyright_page__(doc)
 
         doc.append(NoEscape(r"\tableofcontents"))
         doc.append(NoEscape(r"\newpage"))
 
-    def __add_copyright_page__(self, doc: Document):
+    def __add_latex_copyright_page__(self, doc: Document):
         doc.append(NoEscape(r"\thispagestyle{empty}"))
         doc.append(NoEscape(r"\vspace*{\fill}"))
         doc.append(NoEscape(r"\begin{center}"))
@@ -102,13 +102,13 @@ class BookDirLaTeXMixin:
         doc.append(NoEscape(r"\vspace*{\fill}"))
         doc.append(NoEscape(r"\newpage"))
 
-    def __add_chapters_to_document__(self, doc: Document):
+    def __add_chapters_to_latex_document__(self, doc: Document):
         chapters = sorted(self.gen_chapter_docs(), key=lambda ch: ch.number)
 
         for chapter_doc in chapters:
-            self.__add_chapter_section__(doc, chapter_doc)
+            self.__add_latex_chapter_section__(doc, chapter_doc)
 
-    def __add_chapter_section__(self, doc: Document, chapter_doc):
+    def __add_latex_chapter_section__(self, doc: Document, chapter_doc):
         with doc.create(Chapter(chapter_doc.title, numbering=True)):
             lines = chapter_doc.lines[1:]
             content = "\n".join(lines).strip()
@@ -160,12 +160,8 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_quotes__(content: str) -> str:
-        content = re.sub(
-            r'"([^"]+?)"', r"\\say{\1}", content, flags=re.DOTALL
-        )
-        content = re.sub(
-            r"“([^”]+?)”", r"\\say{\1}", content, flags=re.DOTALL
-        )
+        content = re.sub(r'"([^"]+?)"', r"\\say{\1}", content, flags=re.DOTALL)
+        content = re.sub(r"“([^”]+?)”", r"\\say{\1}", content, flags=re.DOTALL)
         content = content.replace(r" \say", r"\say")
         return content
 
