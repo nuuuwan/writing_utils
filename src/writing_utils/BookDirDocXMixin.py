@@ -118,9 +118,6 @@ class BookDirDocXMixin:
     def __convert_markdown_to_docx__(
         self, content: str, doc: Document
     ) -> None:
-        content = self.__normalize_punctuation__(content)
-        content = self.__escape_special_chars__(content)
-
         paragraphs = content.split("\n")
 
         for para_text in paragraphs:
@@ -206,19 +203,3 @@ class BookDirDocXMixin:
                 run.italic = True
 
             pos = abs_end
-
-    @staticmethod
-    def __normalize_punctuation__(content: str) -> str:
-        content = content.replace("\u2019", "'")
-        content = content.replace("\u2018", "'")
-        content = content.replace(" - ", " — ")
-        content = content.replace(" \u2014 ", " — ")
-        content = content.replace(" \u2013 ", " — ")
-        content = content.replace("\u2014", "—")
-        content = content.replace("\u2013", "–")
-
-        return content
-
-    @staticmethod
-    def __escape_special_chars__(content: str) -> str:
-        return content
