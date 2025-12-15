@@ -4,7 +4,7 @@ import re
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Inches, Pt
-from utils import Log
+from utils import File, Log
 
 from private import data
 
@@ -17,9 +17,7 @@ class BookDirDocXMixin:
         os.system(f'open "{docx_path}"')
 
     def build_docx(self) -> Document:
-        doc = self.__create_docx_document_and_save__()
-        log.info(f"📄 Wrote {self.path}.docx")
-        return doc
+        return self.__create_docx_document_and_save__()
 
     def __create_docx_file__(self) -> str:
         docx_path = self.path + ".docx"
@@ -30,6 +28,7 @@ class BookDirDocXMixin:
         doc = self.__create_docx_document__()
         self.__add_chapters_to_docx_document__(doc)
         doc.save(docx_path)
+        log.info(f"📄 Wrote {File(docx_path)}")
         return docx_path
 
     def __create_docx_document_and_save__(self) -> Document:
@@ -42,7 +41,7 @@ class BookDirDocXMixin:
         doc = self.__create_docx_document__()
         self.__add_chapters_to_docx_document__(doc)
         doc.save(docx_path)
-        return doc
+        return docx_path
 
     def __create_docx_document__(self) -> Document:
         doc = Document()

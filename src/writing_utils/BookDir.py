@@ -94,10 +94,18 @@ class BookDir(
         other_chapters = list(other.gen_chapter_docs())
 
         if len(self_chapters) != len(other_chapters):
+            log.debug(
+                f"Different number of chapters: {
+                    len(self_chapters)} vs {
+                    len(other_chapters)}"
+            )
             return False
 
         for self_chapter, other_chapter in zip(self_chapters, other_chapters):
             if self_chapter.content != other_chapter.content:
+                log.debug(
+                    f"Different chapter contents: {self_chapter} vs {other_chapter}"
+                )
                 return False
 
         return True

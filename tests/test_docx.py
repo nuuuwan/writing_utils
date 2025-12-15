@@ -21,23 +21,26 @@ class TestDocXRoundTrip(unittest.TestCase):
 
     def test_docx_roundtrip(self):
         chapter1_content = """# 1. First Chapter
+
 This is the first chapter with some text.
 
 It has multiple paragraphs.
-This is the second paragraph."""
+This is the second paragraph.
+"""
 
         chapter2_content = """# 2. Second Chapter
+
 This is the second chapter.
 
-Another paragraph here."""
+Another paragraph here.
+"""
 
         chapter1_path = os.path.join(self.temp_dir, "01-First_Chapter.md")
         chapter2_path = os.path.join(self.temp_dir, "02-Second_Chapter.md")
-
         File(chapter1_path).write(chapter1_content)
         File(chapter2_path).write(chapter2_content)
-
         book_dir1 = BookDir(self.temp_dir)
+        book_dir1.clean_all()
 
         book_dir1.build_docx()
         docx_file_path = self.temp_dir + ".docx"

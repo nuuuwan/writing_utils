@@ -1,9 +1,8 @@
 import os
 import re
-import tempfile
 
 from docx import Document
-from utils import Log
+from utils import File, Log
 
 log = Log("BookDirReverseDocXMixin")
 
@@ -11,10 +10,10 @@ log = Log("BookDirReverseDocXMixin")
 class BookDirReverseDocXMixin:
     @classmethod
     def from_docx(cls, docx_path: str):
-        from writing_utils import BookDir
 
         doc = Document(docx_path)
-        temp_dir = tempfile.mkdtemp(prefix="writing_utils_")
+        temp_dir = docx_path + ".bookdir"
+        os.makedirs(temp_dir, exist_ok=True)
 
         chapters = {}
         current_chapter_num = None
@@ -57,9 +56,9 @@ class BookDirReverseDocXMixin:
         for chapter_num, (title, content) in sorted(chapters.items()):
             filename = f"{chapter_num:02d}-{title.replace(' ', '_')}.md"
             filepath = os.path.join(temp_dir, filename)
-            with open(filepath, "w") as f:
-                f.write(content)
+            File(filepath).write(content)
 
-        book_dir = BookDir(temp_dir)
+        book_dir = cls(temp_dir)
+        book_dir.clean_all()
         log.info(f"📖 Loaded BookDir from {docx_path}")
         return book_dir
