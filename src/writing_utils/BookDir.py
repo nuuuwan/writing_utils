@@ -35,7 +35,8 @@ class BookDir(
 
     # Data Access
     def gen_chapter_docs(self) -> Generator[ChapterFile, None, None]:
-        for file_name in os.listdir(self.path):
+        file_names = sorted(os.listdir(self.path))
+        for file_name in file_names:
             if file_name.endswith(".md"):
                 yield ChapterFile(os.path.join(self.path, file_name))
 
