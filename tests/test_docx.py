@@ -58,7 +58,7 @@ Another paragraph here.
         File(chapter1_path).write(chapter1_content)
         File(chapter2_path).write(chapter2_content)
         book_dir1 = BookDir(self.temp_dir)
-        book_dir1.clean_all()
+        book_dir1.clean_and_write_all()
 
         book_dir1.build_docx()
         docx_file_path = self.temp_dir + ".docx"

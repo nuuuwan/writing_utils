@@ -10,7 +10,6 @@ log = Log("BookDirReverseDocXMixin")
 class BookDirReverseDocXMixin:
     @staticmethod
     def extract_formatted_text(para):
-        """Extract text from paragraph while preserving bold, italic, and quotes."""
         formatted_text = ""
         for run in para.runs:
             text = run.text
@@ -32,7 +31,7 @@ class BookDirReverseDocXMixin:
         cls._save_chapters_to_files(chapters, temp_dir)
 
         book_dir = cls(temp_dir)
-        book_dir.clean_all()
+        book_dir.clean_and_write_all()
         log.info(f"📖 Loaded BookDir from {docx_path}")
         return book_dir
 

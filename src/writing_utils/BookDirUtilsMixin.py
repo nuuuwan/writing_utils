@@ -8,10 +8,10 @@ log = Log("BookDir")
 
 class BookDirUtilsMixin:
 
-    def clean_all(self):
+    def clean_and_write_all(self):
         n_cleaned = 0
         for chapter_doc in self.gen_chapter_docs():
-            if chapter_doc.clean():
+            if chapter_doc.clean_and_write():
                 n_cleaned += 1
         log.info(f"🧹 Cleaned {n_cleaned} chapters.")
 
