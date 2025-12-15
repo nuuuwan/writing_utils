@@ -128,4 +128,20 @@ class ChapterFile(File):
     def __eq__(self, other):
         if not isinstance(other, ChapterFile):
             return False
-        return self.content == other.content
+
+        lines_self = self.read_lines()
+        lines_other = other.read_lines()
+        if len(lines_self) != len(lines_other):
+            log.debug(
+                f"line count mismatch: {len(lines_self)} vs {len(lines_other)}"
+            )
+            return False
+
+        for i, (line_self, line_other) in enumerate(
+            zip(lines_self, lines_other), start=1
+        ):
+            if line_self.strip() != line_other.strip():
+                log.debug(f'{i}: "{line_self}" != "{line_other}"')
+                return False
+
+        return True

@@ -102,7 +102,7 @@ class BookDir(
             return False
 
         for self_chapter, other_chapter in zip(self_chapters, other_chapters):
-            if self_chapter.content != other_chapter.content:
+            if self_chapter != other_chapter:
                 log.debug(
                     f"Different chapter contents: {self_chapter} vs {other_chapter}"
                 )
