@@ -1,7 +1,6 @@
 import os
 import shutil
 import sys
-import tempfile
 import unittest
 
 from utils import File
@@ -13,19 +12,36 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 class TestDocXRoundTrip(unittest.TestCase):
     def setUp(self):
-        self.temp_dir = tempfile.mkdtemp(prefix="test_bookdir_")
+        self.temp_dir = os.path.join("tests", "output", "test_roundtrip")
+        shutil.rmtree(self.temp_dir, ignore_errors=True)
+        os.makedirs(self.temp_dir, exist_ok=True)
 
     def tearDown(self):
-        if os.path.exists(self.temp_dir):
-            shutil.rmtree(self.temp_dir)
+        pass
 
     def test_docx_roundtrip(self):
         chapter1_content = """# 1. First Chapter
+
+"This is a QUOTE"
+
+*This text is italicized.*
+
+**This text is bold.**
 
 This is the first chapter with some text.
 
 It has multiple paragraphs.
 This is the second paragraph.
+
+---
+
+Some more stuff. And more stuff.
+
+---
+
+**Later**
+
+
 """
 
         chapter2_content = """# 2. Second Chapter
