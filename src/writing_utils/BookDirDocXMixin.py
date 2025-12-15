@@ -120,7 +120,6 @@ class BookDirDocXMixin:
     ) -> None:
         content = self.__normalize_punctuation__(content)
         content = self.__escape_special_chars__(content)
-        content = self.__fix_spacing__(content)
 
         paragraphs = content.split("\n")
 
@@ -130,7 +129,7 @@ class BookDirDocXMixin:
                 continue
 
             if re.match(r"^-{3,}$", para_text):
-                doc.add_paragraph("* * *")
+                doc.add_paragraph("---")
                 continue
 
             header_match = re.match(r"^(#{1,3})\s+(.+)$", para_text)
@@ -147,8 +146,6 @@ class BookDirDocXMixin:
         self, para, text: str
     ) -> None:
         pos = 0
-
-        text = self.__convert_quotes__(text)
 
         while pos < len(text):
             bold_match = re.search(r"\*\*(.+?)\*\*", text[pos:])
@@ -211,23 +208,6 @@ class BookDirDocXMixin:
             pos = abs_end
 
     @staticmethod
-    def __fix_spacing__(content: str) -> str:
-        for abbrev in [
-            "Mr",
-            "Mrs",
-            "Ms",
-            "Dr",
-            "Prof",
-            "Sr",
-            "Jr",
-            "vs",
-            "etc",
-        ]:
-            content = re.sub(rf"\b{abbrev}\.\s+", rf"{abbrev}. ", content)
-
-        return content
-
-    @staticmethod
     def __normalize_punctuation__(content: str) -> str:
         content = content.replace("\u2019", "'")
         content = content.replace("\u2018", "'")
@@ -237,17 +217,6 @@ class BookDirDocXMixin:
         content = content.replace("\u2014", "—")
         content = content.replace("\u2013", "–")
 
-        return content
-
-    @staticmethod
-    def __convert_quotes__(content: str) -> str:
-        content = re.sub(
-            r'"([^"]+?)"', r"\\say{\1}", content, flags=re.DOTALL
-        )
-        content = re.sub(
-            r'[""]([^""]+?)[""]', r"\\say{\1}", content, flags=re.DOTALL
-        )
-        content = content.replace(r" \say", r"\say")
         return content
 
     @staticmethod
