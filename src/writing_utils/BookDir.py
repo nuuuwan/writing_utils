@@ -42,13 +42,12 @@ class BookDir(
 
     def get_name_map_from_titles(self) -> dict[str, str]:
         name_map = {}
-        for chapter_doc in self.gen_chapter_docs():
-            new_file_name = (
-                f"{chapter_doc.number:02d}-{chapter_doc.title_cleaned}.md"
-            )
-            if new_file_name:
-                old_file_name = os.path.basename(chapter_doc.path)
-                name_map[old_file_name] = new_file_name
+        for i_chapter, chapter_doc in enumerate(
+            self.gen_chapter_docs(), start=1
+        ):
+            new_file_name = f"{i_chapter:02d}-{chapter_doc.title_cleaned}.md"
+            old_file_name = os.path.basename(chapter_doc.path)
+            name_map[old_file_name] = new_file_name
         return name_map
 
     # Properties

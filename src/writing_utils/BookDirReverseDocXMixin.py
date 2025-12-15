@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 
 from docx import Document
 from utils import File, Log
@@ -27,6 +28,7 @@ class BookDirReverseDocXMixin:
         """Load BookDir from a DOCX file."""
         doc = Document(docx_path)
         temp_dir = docx_path + ".bookdir"
+        shutil.rmtree(temp_dir, ignore_errors=True)
         os.makedirs(temp_dir, exist_ok=True)
 
         chapters = cls._parse_chapters_from_doc(doc)

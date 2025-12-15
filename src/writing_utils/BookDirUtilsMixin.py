@@ -26,6 +26,11 @@ class BookDirUtilsMixin:
                 os.path.join(self.path, new_file_name),
             )
             n_renamed += 1
+
+        chapter_docs = [cd for cd in self.gen_chapter_docs()]
+        for i_chapter, chapter_doc in enumerate(chapter_docs, start=1):
+            chapter_doc.number = i_chapter
+
         log.info(f"↔️  Renamed {n_renamed} chapters.")
 
     def randomize_titles(self):
