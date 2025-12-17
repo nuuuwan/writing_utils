@@ -8,6 +8,7 @@ from utils import FileOrDirectory, Log, Time, TimeFormat
 
 from writing_utils.BookDirDocXMixin import BookDirDocXMixin
 from writing_utils.BookDirLaTeXMixin import BookDirLaTeXMixin
+from writing_utils.BookDirMarkdownMixin import BookDirMarkdownMixin
 from writing_utils.BookDirReverseDocXMixin import BookDirReverseDocXMixin
 from writing_utils.BookDirUtilsMixin import BookDirUtilsMixin
 from writing_utils.ChapterFile import ChapterFile
@@ -20,6 +21,7 @@ class BookDir(
     BookDirUtilsMixin,
     BookDirLaTeXMixin,
     BookDirDocXMixin,
+    BookDirMarkdownMixin,
     BookDirReverseDocXMixin,
 ):
     # Construction
