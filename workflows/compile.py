@@ -15,5 +15,13 @@ if __name__ == "__main__":
     book_dir2 = BookDir.from_docx(docx_path)
     assert book_dir == book_dir2
 
+    md_path = book_dir.build_md()
+    # book_dir.open_md()
+    book_dir3 = BookDir.from_md(
+        md_path,
+        output_dir=md_path + ".dir_from_md",
+    )
+    assert book_dir == book_dir3
+
     book_dir.backup()
-    # book_dir.open()
+    book_dir.open()
