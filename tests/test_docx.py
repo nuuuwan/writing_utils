@@ -81,7 +81,7 @@ Another paragraph here.
         book_dir1.clean_and_write_all()
 
         md_file_path = self.dir_book + ".md"
-        book_dir1.build_md(md_file_path)
+        book_dir1.build_md()
         self.assertTrue(
             os.path.exists(md_file_path), "Markdown file was not created"
         )
