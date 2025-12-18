@@ -35,7 +35,7 @@ class BookDirMarkdownMixin:
 
     @classmethod
     def from_md(cls, md_path: str, output_dir: str):
-
+        shutil.rmtree(output_dir, ignore_errors=True)
         os.makedirs(output_dir, exist_ok=True)
 
         lines = File(md_path).read_lines()
