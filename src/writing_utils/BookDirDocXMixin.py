@@ -31,7 +31,10 @@ class BookDirDocXMixin:
         return docx_path
 
     def __create_docx_document_and_save__(self) -> Document:
-        docx_path = self.path + ".docx"
+        compiled_dir = self.path + ".compiled"
+        os.makedirs(compiled_dir, exist_ok=True)
+        docx_path = os.path.join(compiled_dir, "book.docx")
+
         os.makedirs(
             os.path.dirname(docx_path) if os.path.dirname(docx_path) else ".",
             exist_ok=True,
