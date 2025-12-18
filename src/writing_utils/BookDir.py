@@ -84,9 +84,16 @@ class BookDir(
 
     def backup(self):
         ts = TimeFormat.TIME_ID.format(Time.now())
-        backup_dir_path = f"{self.path}.backup.{ts}"
-        shutil.copytree(self.path, backup_dir_path)
-        log.info(f"Wrote {backup_dir_path}")
+        dir_backups_all = f"{self.path}.backups"
+        log.debug(f"{dir_backups_all=}")
+        os.makedirs(dir_backups_all, exist_ok=True)
+
+        name_only = os.path.basename(self.path)
+        dir_backup = os.path.join(dir_backups_all, f"{name_only}.backup.{ts}")
+        log.debug(f"{dir_backup=}")
+
+        shutil.copytree(self.path, dir_backup)
+        log.info(f"Wrote {dir_backup}")
 
     def __eq__(self, other):
         if not isinstance(other, BookDir):
