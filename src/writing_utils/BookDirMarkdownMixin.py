@@ -10,7 +10,9 @@ log = Log("BookDirMarkdownMixin")
 
 class BookDirMarkdownMixin:
     def build_md(self) -> str:
-        md_path = self.path + ".md"
+        compiled_dir = self.path + ".compiled"
+        os.makedirs(compiled_dir, exist_ok=True)
+        md_path = os.path.join(compiled_dir, "book.md")
         lines = []
 
         lines.append(f"# {data.TITLE}")

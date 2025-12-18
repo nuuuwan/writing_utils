@@ -20,11 +20,10 @@ class BookDirDocXMixin:
         return self.__create_docx_document_and_save__()
 
     def __create_docx_file__(self) -> str:
-        docx_path = self.path + ".docx"
-        os.makedirs(
-            os.path.dirname(docx_path) if os.path.dirname(docx_path) else ".",
-            exist_ok=True,
-        )
+        compiled_dir = self.path + ".compiled"
+        os.makedirs(compiled_dir, exist_ok=True)
+        docx_path = os.path.join(compiled_dir, "book.docx")
+
         doc = self.__create_docx_document__()
         self.__add_chapters_to_docx_document__(doc)
         doc.save(docx_path)
@@ -95,9 +94,7 @@ class BookDirDocXMixin:
 
         copyright_notice = doc.add_paragraph()
         copyright_notice.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        copyright_notice_run = copyright_notice.add_run(
-            "All rights reserved."
-        )
+        copyright_notice_run = copyright_notice.add_run("All rights reserved.")
         copyright_notice_run.font.size = Pt(10)
 
         doc.add_page_break()
