@@ -8,7 +8,8 @@ log = Log("BookDirMarkdownMixin")
 
 
 class BookDirMarkdownMixin:
-    def build_md(self, md_path) -> str:
+    def build_md(self) -> str:
+        md_path = self.path + ".md"
         lines = []
 
         lines.append(f"# {data.TITLE}")
@@ -68,7 +69,6 @@ class BookDirMarkdownMixin:
                         )
                 new_chapter_lines.append(line)
 
-            print("title_line", title_line)
             chapter_content = "\n".join(new_chapter_lines).strip()
 
             title_only = title_line[2:].strip()
@@ -79,7 +79,6 @@ class BookDirMarkdownMixin:
             chapter_path = os.path.join(output_dir, chapter_filename)
 
             File(chapter_path).write(chapter_content)
-            log.info(f"📖 Created chapter: {chapter_filename}")
 
         log.info(f"📚 Created BookDir from {File(md_path)} at {output_dir}")
         return cls(output_dir)
