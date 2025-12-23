@@ -45,6 +45,7 @@ class BookDirLaTeXMixin:
 
     def __configure_latex_page_layout__(self, doc: Document):
         doc.preamble.append(NoEscape(r"\usepackage[margin=1in]{geometry}"))
+        doc.preamble.append(NoEscape(r"\usepackage{mathpazo}"))
         doc.preamble.append(NoEscape(r"\usepackage{setspace}"))
         doc.preamble.append(NoEscape(r"\doublespacing"))
         doc.preamble.append(NoEscape(r"\usepackage{csquotes}"))
