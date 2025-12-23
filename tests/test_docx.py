@@ -67,8 +67,7 @@ Another paragraph here.
         book_dir1 = BookDir(self.dir_book)
         book_dir1.clean_and_write_all()
 
-        book_dir1.build_docx()
-        docx_file_path = self.dir_book + ".docx"
+        docx_file_path = book_dir1.build_docx()
         self.assertTrue(
             os.path.exists(docx_file_path), "DOCX file was not created"
         )
@@ -80,8 +79,7 @@ Another paragraph here.
         book_dir1 = BookDir(self.dir_book)
         book_dir1.clean_and_write_all()
 
-        md_file_path = self.dir_book + ".md"
-        book_dir1.build_md()
+        md_file_path = book_dir1.build_md()
         self.assertTrue(
             os.path.exists(md_file_path), "Markdown file was not created"
         )
