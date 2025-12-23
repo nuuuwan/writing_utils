@@ -1,5 +1,4 @@
 import os
-import shutil
 import sys
 import unittest
 
@@ -13,13 +12,19 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 class TestDocXRoundTrip(unittest.TestCase):
     CHAPTER1_CONTENT = """# 1. First Chapter
 
+This is the first chapter with some text.
+
 "This is a QUOTE"
+
+'This is in single quotes.'
 
 *This text is italicized.*
 
 **This text is bold.**
 
-This is the first chapter with some text.
+*This is in italics. with a "quote" inside.*
+
+"This is a quote with *italics* and **bold** inside."
 
 It has multiple paragraphs.
 This is the second paragraph.
@@ -44,11 +49,41 @@ This is the second chapter.
 Another paragraph here.
 """
 
+    CHAPTER1_TEX = r"""\chapter{First Chapter}%
+\label{chap:FirstChapter}%
+This is the first chapter with some text.
+
+\say{This is a QUOTE}
+
+'This is in single quotes.'
+
+\textit{This text is italicized.}
+
+\textbf{This text is bold.}
+
+\textit{This is in italics. with a\say{quote} inside.}
+
+\say{This is a quote with \textit{italics} and \textbf{bold} inside.}
+
+It has multiple paragraphs.
+
+This is the second paragraph.
+
+\sectionbreak{}
+
+Some more stuff. And more stuff.
+
+\say{But Neth's guts have already tightened}
+
+\sectionbreak{}
+
+\textbf{Later}"""
+
     def setUp(self):
         self.dir_test_output = os.path.join(
             "tests", "output", "test_roundtrip"
         )
-        shutil.rmtree(self.dir_test_output, ignore_errors=True)
+        # shutil.rmtree(self.dir_test_output, ignore_errors=True)
         os.makedirs(self.dir_test_output, exist_ok=True)
         self._setup_chapters()
 
@@ -62,6 +97,29 @@ Another paragraph here.
 
     def tearDown(self):
         pass
+
+    def test_latex(self):
+        book_dir1 = BookDir(self.dir_book)
+        book_dir1.clean_and_write_all()
+
+        latex_file_path = book_dir1.build_latex()
+        self.assertTrue(
+            os.path.exists(latex_file_path), "LaTeX file was not created"
+        )
+
+        actual_lines = File(latex_file_path).read_lines()[44:73]
+        expected_lines = self.CHAPTER1_TEX.splitlines()
+        assert len(expected_lines) == len(
+            actual_lines
+        ), "Number of lines in LaTeX output does not match expected"
+        for i, (expected_line, actual_line) in enumerate(
+            zip(expected_lines, actual_lines), start=1
+        ):
+            self.assertEqual(
+                expected_line,
+                actual_line,
+                f'{i}: "{expected_line}" != "{actual_line}"',
+            )
 
     def test_docx_roundtrip(self):
         book_dir1 = BookDir(self.dir_book)

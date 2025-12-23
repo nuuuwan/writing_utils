@@ -16,7 +16,7 @@ class BookDirLaTeXMixin:
         pdf_path = os.path.join(latex_dir, "book.pdf")
         os.system(f'open "{pdf_path}"')
 
-    def build_latex(self) -> Document:
+    def build_latex(self) -> str:
         latex_dir = self.__create_latex_directory__()
         output_path = os.path.join(latex_dir, "book")
 
@@ -25,7 +25,7 @@ class BookDirLaTeXMixin:
 
         doc.generate_pdf(output_path, clean_tex=False)
         log.info(f"📄 Wrote {output_path}.pdf")
-        return doc
+        return output_path + ".tex"
 
     def __create_latex_directory__(self) -> str:
         compiled_dir = self.path + ".compiled"
