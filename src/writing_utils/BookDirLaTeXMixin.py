@@ -20,7 +20,14 @@ class BookDirLaTeXMixin:
         latex_dir = self.__create_latex_directory__()
         output_path = os.path.join(latex_dir, "book")
 
-        doc = self.__create_latex_document__()
+        chapters = sorted(self.gen_chapter_docs(), key=lambda ch: ch.number)
+
+        # Calculate word count from chapters
+        word_count = sum(
+            len(" ".join(ch.lines[1:]).split()) for ch in chapters
+        )
+
+        doc = self.__create_latex_document__(word_count)
         self.__add_chapters_to_latex_document__(doc)
 
         doc.generate_pdf(output_path, clean_tex=False)
@@ -33,13 +40,13 @@ class BookDirLaTeXMixin:
         os.makedirs(latex_dir, exist_ok=True)
         return latex_dir
 
-    def __create_latex_document__(self) -> Document:
+    def __create_latex_document__(self, word_count: int) -> Document:
         doc = Document(
             documentclass="book", document_options=["a4paper", "12pt"]
         )
 
         self.__configure_latex_page_layout__(doc)
-        self.__add_latex_title_page__(doc)
+        self.__add_latex_title_page__(doc, word_count)
 
         return doc
 
@@ -85,13 +92,20 @@ class BookDirLaTeXMixin:
         doc.preamble.append(NoEscape(r"\let\cleardoublepage\clearpage"))
         doc.preamble.append(NoEscape(r"\usepackage{hyperref}"))
 
-    def __add_latex_title_page__(self, doc: Document):
+    def __add_latex_title_page__(self, doc: Document, word_count: int):
 
         title_with_subtitle = data.TITLE + r"\\" + r"\large " + data.SUBTITLE
         doc.preamble.append(Command("title", NoEscape(title_with_subtitle)))
 
         doc.preamble.append(Command("author", "By " + data.AUTHOR))
-        doc.preamble.append(Command("date", NoEscape(r"\today")))
+
+        date_and_wordcount = NoEscape(
+            r"\small{\today}"
+            + r"\\"
+            + r"\vspace{1em}"
+            + rf"\small{{{word_count:,} words}}"
+        )
+        doc.preamble.append(Command("date", date_and_wordcount))
 
         doc.append(NoEscape(r"\maketitle"))
         doc.append(NoEscape(r"\newpage"))
@@ -173,9 +187,7 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_quotes__(content: str) -> str:
-        content = re.sub(
-            r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL
-        )
+        content = re.sub(r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL)
         return content
 
     @staticmethod
