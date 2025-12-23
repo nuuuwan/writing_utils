@@ -97,7 +97,9 @@ class BookDirDocXMixin:
 
         copyright_notice = doc.add_paragraph()
         copyright_notice.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        copyright_notice_run = copyright_notice.add_run("All rights reserved.")
+        copyright_notice_run = copyright_notice.add_run(
+            "All rights reserved."
+        )
         copyright_notice_run.font.size = Pt(10)
 
         doc.add_page_break()
