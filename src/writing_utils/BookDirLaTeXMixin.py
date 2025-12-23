@@ -74,6 +74,7 @@ class BookDirLaTeXMixin:
         say_command = r"\newcommand{\say}[1]{{\enquote{#1}}}"
         doc.preamble.append(NoEscape(say_command))
         doc.preamble.append(NoEscape(r"\let\cleardoublepage\clearpage"))
+        doc.preamble.append(NoEscape(r"\usepackage{hyperref}"))
 
     def __add_latex_title_page__(self, doc: Document):
 
