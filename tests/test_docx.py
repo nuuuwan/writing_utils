@@ -135,7 +135,9 @@ And the whole mob join in a rowdy chorus---loud as ever, and completely off key:
             os.path.exists(latex_file_path), "LaTeX file was not created"
         )
 
-        actual_lines = File(latex_file_path).read_lines()[47:90]
+        i_start = 49
+        i_end = i_start + 43
+        actual_lines = File(latex_file_path).read_lines()[i_start:i_end]
         expected_lines = self.CHAPTER1_TEX.splitlines()
         assert len(expected_lines) == len(
             actual_lines
