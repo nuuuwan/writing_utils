@@ -52,8 +52,17 @@ class BookDirLaTeXMixin:
         doc.preamble.append(NoEscape(r"\usepackage{fancyhdr}"))
         doc.preamble.append(NoEscape(r"\pagestyle{fancy}"))
         doc.preamble.append(NoEscape(r"\fancyhf{}"))
+        doc.preamble.append(
+            NoEscape(r"\fancyhead[L]{\textit{\nouppercase{\leftmark}}}")
+        )
+        doc.preamble.append(
+            NoEscape(r"\fancyhead[R]{\textit{" + data.TITLE + r"}}")
+        )
         doc.preamble.append(NoEscape(r"\fancyfoot[C]{\thepage}"))
-        doc.preamble.append(NoEscape(r"\renewcommand{\headrulewidth}{0pt}"))
+        doc.preamble.append(NoEscape(r"\renewcommand{\headrulewidth}{0.5pt}"))
+        doc.preamble.append(
+            NoEscape(r"\renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}")
+        )
         doc.preamble.append(NoEscape(r"\usepackage{titlesec}"))
         chapter_format = (
             r"\titleformat{\chapter}[hang]"

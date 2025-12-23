@@ -105,7 +105,9 @@ Some more stuff. And more stuff.
 
 And the whole mob join in a rowdy chorus---loud as ever, and completely off key:
 
-\textit{\say{Hauling us all through the mess of his erection.}}"""
+\textit{\say{Hauling us all through the mess of his erection.}}
+
+%"""
 
     def setUp(self):
         self.dir_test_output = os.path.join(
@@ -135,9 +137,10 @@ And the whole mob join in a rowdy chorus---loud as ever, and completely off key:
             os.path.exists(latex_file_path), "LaTeX file was not created"
         )
 
-        i_start = 49
-        i_end = i_start + 43
-        actual_lines = File(latex_file_path).read_lines()[i_start:i_end]
+        all_lines = File(latex_file_path).read_lines()
+        i_start = all_lines.index(r"\chapter{First Chapter}%")
+        i_end = all_lines.index(r"\chapter{Second Chapter}%")
+        actual_lines = all_lines[i_start:i_end]
         expected_lines = self.CHAPTER1_TEX.splitlines()
         assert len(expected_lines) == len(
             actual_lines
