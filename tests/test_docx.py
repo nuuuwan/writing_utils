@@ -39,6 +39,20 @@ Some more stuff. And more stuff.
 
 **Later**
 
+---
+
+*"Falling, he swaggered, a trail of grim deception,"*
+
+*"Calling out breasts that spread like foul infection,"*
+
+*"Stalling with grins that bent truth past reflection,"*
+
+*"Hauling us all through the mass of his erection."*
+
+And the whole mob join in a rowdy chorus - loud as ever, and completely off key:
+
+*"Hauling us all through the mess of his erection."*
+
 
 """
 
@@ -77,7 +91,21 @@ Some more stuff. And more stuff.
 
 \sectionbreak{}
 
-\textbf{Later}"""
+\textbf{Later}
+
+\sectionbreak{}
+
+\textit{\say{Falling, he swaggered, a trail of grim deception,}}
+
+\textit{\say{Calling out breasts that spread like foul infection,}}
+
+\textit{\say{Stalling with grins that bent truth past reflection,}}
+
+\textit{\say{Hauling us all through the mass of his erection.}}
+
+And the whole mob join in a rowdy chorus---loud as ever, and completely off key:
+
+\textit{\say{Hauling us all through the mess of his erection.}}"""
 
     def setUp(self):
         self.dir_test_output = os.path.join(
@@ -107,7 +135,7 @@ Some more stuff. And more stuff.
             os.path.exists(latex_file_path), "LaTeX file was not created"
         )
 
-        actual_lines = File(latex_file_path).read_lines()[44:73]
+        actual_lines = File(latex_file_path).read_lines()[44:87]
         expected_lines = self.CHAPTER1_TEX.splitlines()
         assert len(expected_lines) == len(
             actual_lines
