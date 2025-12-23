@@ -71,7 +71,7 @@ class BookDirLaTeXMixin:
         )
         doc.preamble.append(NoEscape(sectionbreak_command))
 
-        say_command = r"\newcommand{\say}[1]{{\enquote{#1}}}"
+        say_command = r"\newcommand{\say}[1]{{\color{Maroon}\enquote{#1}}}"
         doc.preamble.append(NoEscape(say_command))
         doc.preamble.append(NoEscape(r"\let\cleardoublepage\clearpage"))
         doc.preamble.append(NoEscape(r"\usepackage{hyperref}"))
