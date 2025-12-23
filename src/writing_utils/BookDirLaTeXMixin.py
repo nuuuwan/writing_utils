@@ -72,6 +72,7 @@ class BookDirLaTeXMixin:
 
         say_command = r"\newcommand{\say}[1]{{\enquote{#1}}}"
         doc.preamble.append(NoEscape(say_command))
+        doc.preamble.append(NoEscape(r"\let\cleardoublepage\clearpage"))
 
     def __add_latex_title_page__(self, doc: Document):
 
@@ -162,9 +163,7 @@ class BookDirLaTeXMixin:
     @staticmethod
     def __convert_quotes__(content: str) -> str:
         # Convert double quotes (straight quotes) - use simple replacement
-        content = re.sub(
-            r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL
-        )
+        content = re.sub(r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL)
         # Convert curly quotes using unicode escapes
         content = re.sub(
             r"[\u201c]([^\u201c\u201d]*?)[\u201d]",
