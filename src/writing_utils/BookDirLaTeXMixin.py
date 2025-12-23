@@ -164,16 +164,9 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_quotes__(content: str) -> str:
-        # Convert double quotes (straight quotes) - use simple replacement
-        content = re.sub(r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL)
-        # Convert curly quotes using unicode escapes
         content = re.sub(
-            r"[\u201c]([^\u201c\u201d]*?)[\u201d]",
-            r"\\say{\1}",
-            content,
-            flags=re.DOTALL,
+            r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL
         )
-        content = content.replace(r" \say", r"\say")
         return content
 
     @staticmethod

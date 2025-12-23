@@ -16,7 +16,7 @@ This is the first chapter with some text.
 
 "This is a QUOTE"
 
-'This is in single quotes.'
+This is in single quotes. And should be ignored.
 
 *This text is italicized.*
 
@@ -69,13 +69,13 @@ This is the first chapter with some text.
 
 \say{This is a QUOTE}
 
-'This is in single quotes.'
+This is in single quotes. And should be ignored.
 
 \textit{This text is italicized.}
 
 \textbf{This text is bold.}
 
-\textit{This is in italics. with a\say{quote} inside.}
+\textit{This is in italics. with a \say{quote} inside.}
 
 \say{This is a quote with \textit{italics} and \textbf{bold} inside.}
 
@@ -135,7 +135,7 @@ And the whole mob join in a rowdy chorus---loud as ever, and completely off key:
             os.path.exists(latex_file_path), "LaTeX file was not created"
         )
 
-        actual_lines = File(latex_file_path).read_lines()[44:87]
+        actual_lines = File(latex_file_path).read_lines()[47:90]
         expected_lines = self.CHAPTER1_TEX.splitlines()
         assert len(expected_lines) == len(
             actual_lines
