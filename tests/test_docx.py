@@ -158,7 +158,7 @@ And the whole mob join in a rowdy chorus---loud as ever, and completely off key:
         book_dir1 = BookDir(self.dir_book)
         book_dir1.clean_and_write_all()
 
-        docx_file_path = book_dir1.build_docx()
+        docx_file_path = book_dir1.build_docx(10)
         self.assertTrue(
             os.path.exists(docx_file_path), "DOCX file was not created"
         )

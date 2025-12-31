@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -12,45 +13,74 @@ log = Log("BookDirDocXMixin")
 
 
 class BookDirDocXMixin:
-    def open_docx(self):
-        docx_path = self.__create_docx_file__()
-        os.system(f'open "{docx_path}"')
 
-    def build_docx(self) -> Document:
-        return self.__create_docx_document_and_save__()
+    def build_docx(self, max_words_per_docx: int = 50000) -> list[Document]:
+        return self.__create_docx_documents_and_save__(max_words_per_docx)
 
-    def __create_docx_file__(self) -> str:
+    def __create_docx_documents_and_save__(
+        self, max_words_per_docx: int = 50000
+    ) -> list[Document]:
         compiled_dir = self.path + ".compiled"
-        os.makedirs(compiled_dir, exist_ok=True)
-        docx_path = os.path.join(compiled_dir, "book.docx")
+        docx_dir = os.path.join(compiled_dir, "docx")
+        shutil.rmtree(docx_dir, ignore_errors=True)
+        os.makedirs(docx_dir, exist_ok=True)
 
-        doc = self.__create_docx_document__()
-        self.__add_chapters_to_docx_document__(doc)
-        doc.save(docx_path)
-        log.info(f"📄 Wrote {File(docx_path)}")
-        return docx_path
+        self.__create_and_save_docx_files__(docx_dir, max_words_per_docx)
+        return docx_dir
 
-    def __create_docx_document_and_save__(self) -> Document:
-        compiled_dir = self.path + ".compiled"
-        os.makedirs(compiled_dir, exist_ok=True)
-        docx_path = os.path.join(compiled_dir, "book.docx")
+    def __create_and_save_docx_files__(
+        self, docx_dir: str, max_words_per_docx: int = 50000
+    ) -> list[str]:
+        chapters = sorted(self.gen_chapter_docs(), key=lambda ch: ch.number)
+        docx_paths = []
+        current_doc = None
+        current_docx_index = 0
+        current_word_count = 0
 
-        os.makedirs(
-            os.path.dirname(docx_path) if os.path.dirname(docx_path) else ".",
-            exist_ok=True,
-        )
+        for chapter_doc in chapters:
+            chapter_word_count = chapter_doc.n_words
 
-        doc = self.__create_docx_document__()
-        self.__add_chapters_to_docx_document__(doc)
-        doc.save(docx_path)
-        return docx_path
+            if (
+                current_doc is not None
+                and current_word_count + chapter_word_count
+                > max_words_per_docx
+            ):
+                docx_path = os.path.join(
+                    docx_dir, f"part_{current_docx_index:02d}.docx"
+                )
+                current_doc.save(docx_path)
+                docx_paths.append(docx_path)
+                log.info(
+                    f"📄 Wrote {File(docx_path)} ({current_word_count} words)"
+                )
+
+                current_doc = None
+                current_docx_index += 1
+                current_word_count = 0
+
+            if current_doc is None:
+                current_doc = self.__create_docx_document__()
+
+            self.__add_docx_chapter_section__(current_doc, chapter_doc)
+            current_word_count += chapter_word_count
+
+        if current_doc is not None:
+            docx_path = os.path.join(
+                docx_dir, f"part_{current_docx_index:02d}.docx"
+            )
+            current_doc.save(docx_path)
+            docx_paths.append(docx_path)
+            log.debug(
+                f"📄 Wrote {File(docx_path)} ({current_word_count} words)"
+            )
+
+        log.info(f"📚 Wrote {len(docx_paths)} parts to {docx_dir}")
+        return docx_paths
 
     def __create_docx_document__(self) -> Document:
         doc = Document()
-
         self.__configure_docx_page_layout__(doc)
         self.__add_docx_title_page__(doc)
-
         return doc
 
     def __configure_docx_page_layout__(self, doc: Document):
@@ -103,12 +133,6 @@ class BookDirDocXMixin:
         copyright_notice_run.font.size = Pt(10)
 
         doc.add_page_break()
-
-    def __add_chapters_to_docx_document__(self, doc: Document):
-        chapters = sorted(self.gen_chapter_docs(), key=lambda ch: ch.number)
-
-        for chapter_doc in chapters:
-            self.__add_docx_chapter_section__(doc, chapter_doc)
 
     def __add_docx_chapter_section__(self, doc: Document, chapter_doc):
         chapter_heading = f"{chapter_doc.number}. {chapter_doc.title}"

@@ -1,3 +1,4 @@
+import glob
 import os
 import re
 import shutil
@@ -25,7 +26,18 @@ class BookDirReverseDocXMixin:
 
     @classmethod
     def from_docx(cls, docx_path: str):
-        """Load BookDir from a DOCX file."""
+        """Load BookDir from a single DOCX file or directory of multiple DOCX files."""
+        # Determine if it's a directory or single file
+        if os.path.isdir(docx_path):
+            # Load from directory of multiple DOCX files
+            return cls._load_from_docx_directory(docx_path)
+        else:
+            # Load from single DOCX file (legacy support)
+            return cls._load_from_single_docx(docx_path)
+
+    @classmethod
+    def _load_from_single_docx(cls, docx_path: str):
+        """Load BookDir from a single DOCX file."""
         doc = Document(docx_path)
         temp_dir = docx_path + ".bookdir"
         shutil.rmtree(temp_dir, ignore_errors=True)
@@ -39,13 +51,48 @@ class BookDirReverseDocXMixin:
         return book_dir
 
     @classmethod
-    def _parse_chapters_from_doc(cls, doc):
-        """Extract chapters from Document, preserving formatting."""
+    def _load_from_docx_directory(cls, docx_dir: str):
+        """Load BookDir from a directory containing multiple DOCX files."""
+        # Find all part_*.docx files in the directory, sorted by part number
+        docx_files = sorted(glob.glob(os.path.join(docx_dir, "part_*.docx")))
+
+        if not docx_files:
+            raise ValueError(f"No DOCX files found in {docx_dir}")
+
+        temp_dir = docx_dir + ".bookdir"
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        os.makedirs(temp_dir, exist_ok=True)
+
+        all_chapters = {}
+
+        for docx_path in docx_files:
+            doc = Document(docx_path)
+            chapters = cls._parse_chapters_from_doc(doc, skip_title_page=True)
+            all_chapters.update(chapters)
+
+        cls._save_chapters_to_files(all_chapters, temp_dir)
+
+        book_dir = cls(temp_dir)
+        log.info(
+            f"📖 Loaded BookDir from {len(docx_files)} DOCX files in {docx_dir}"
+        )
+        return book_dir
+
+    @classmethod
+    def _parse_chapters_from_doc(cls, doc, skip_title_page=False):
+        """Extract chapters from Document, preserving formatting.
+
+        Args:
+            doc: The Document to parse
+            skip_title_page: If True, skip paragraphs before the first chapter heading
+        """
         chapters = {}
         current_chapter_num = None
         current_chapter_title = None
         current_chapter_lines = []
-        found_first_chapter = False
+        found_first_chapter = (
+            not skip_title_page
+        )  # If skipping, start in "found" state
 
         for para in doc.paragraphs:
             style_name = para.style.name
