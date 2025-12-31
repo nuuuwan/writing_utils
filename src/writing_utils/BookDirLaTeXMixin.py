@@ -216,7 +216,9 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_quotes__(content: str) -> str:
-        content = re.sub(r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL)
+        content = re.sub(
+            r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL
+        )
         return content
 
     @staticmethod
