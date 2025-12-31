@@ -44,4 +44,4 @@ class BookDirUtilsMixin:
         log.info(f"n_words={self.n_words:,}")
 
     def open(self):
-        os.system(f'open "{self.path}"')
+        os.system(f'open -a Obsidian "{self.path}"')

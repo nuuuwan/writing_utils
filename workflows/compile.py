@@ -11,7 +11,7 @@ if __name__ == "__main__":
     book_dir.backup()
 
     # docx
-    docx_path = book_dir.build_docx()
+    docx_path = book_dir.build_docx(max_words_per_docx=10_000)
     book_dir2 = BookDir.from_docx(docx_path)
     assert book_dir == book_dir2
 

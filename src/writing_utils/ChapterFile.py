@@ -1,3 +1,4 @@
+import os
 import re
 from functools import cached_property
 
@@ -151,3 +152,6 @@ class ChapterFile(File):
                 return False
 
         return True
+
+    def open(self):
+        os.system(f'open -a "Visual Studio Code" "{self.path}"')
