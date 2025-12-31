@@ -53,6 +53,10 @@ And the whole mob join in a rowdy chorus - loud as ever, and completely off key:
 
 *"Hauling us all through the mess of his erection."*
 
+[[This is a note]]
+
+**This is a [[bold note]]**
+
 
 """
 
@@ -106,6 +110,10 @@ Some more stuff. And more stuff.
 And the whole mob join in a rowdy chorus---loud as ever, and completely off key:
 
 \textit{\say{Hauling us all through the mess of his erection.}}
+
+
+
+\textbf{This is a }
 
 %"""
 

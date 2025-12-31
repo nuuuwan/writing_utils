@@ -144,6 +144,7 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_markdown_to_latex__(content: str) -> str:
+        content = BookDirLaTeXMixin.__remove_obsidian_notes__(content)
         content = BookDirLaTeXMixin.__normalize_punctuation__(content)
         content = BookDirLaTeXMixin.__escape_special_chars__(content)
         content = BookDirLaTeXMixin.__fix_spacing__(content)
@@ -151,6 +152,12 @@ class BookDirLaTeXMixin:
         content = BookDirLaTeXMixin.__convert_text_formatting__(content)
         content = BookDirLaTeXMixin.__convert_headers__(content)
         content = BookDirLaTeXMixin.__convert_rules_and_paragraphs__(content)
+        return content
+
+    @staticmethod
+    def __remove_obsidian_notes__(content: str) -> str:
+        # Remove all Obsidian note references of the form [[xxx]]
+        content = re.sub(r"\[\[.+?\]\]", "", content)
         return content
 
     @staticmethod
