@@ -112,6 +112,9 @@ class BookDirLaTeXMixin:
 
         self.__add_latex_copyright_page__(doc)
 
+        self.__add_author_bio_page__(doc)
+        self.__add_book_description_page__(doc)
+
         doc.append(NoEscape(r"\tableofcontents"))
         doc.append(NoEscape(r"\newpage"))
 
@@ -128,6 +131,25 @@ class BookDirLaTeXMixin:
         doc.append(NoEscape(r"\end{center}"))
         doc.append(NoEscape(r"\vspace*{\fill}"))
         doc.append(NoEscape(r"\newpage"))
+
+    def __add_book_description_page__(self, doc: Document):
+        description = self.__load_tex_file__("private/about_the_book.tex")
+        doc.append(NoEscape(description))
+
+    def __add_author_bio_page__(self, doc: Document):
+        bio = self.__load_tex_file__("private/about_the_author.tex")
+        doc.append(NoEscape(bio))
+
+    @staticmethod
+    def __load_tex_file__(file_path: str) -> str:
+        """Load content from a LaTeX file"""
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            return content.strip()
+        except FileNotFoundError:
+            log.warning(f"File not found: {file_path}")
+            return ""
 
     def __add_chapters_to_latex_document__(self, doc: Document):
         chapters = sorted(self.gen_chapter_docs(), key=lambda ch: ch.number)
@@ -194,7 +216,9 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_quotes__(content: str) -> str:
-        content = re.sub(r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL)
+        content = re.sub(
+            r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL
+        )
         return content
 
     @staticmethod
