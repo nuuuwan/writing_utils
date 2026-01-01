@@ -110,6 +110,9 @@ class BookDirLaTeXMixin:
         doc.append(NoEscape(r"\maketitle"))
         doc.append(NoEscape(r"\newpage"))
 
+        # Switch to roman numerals for front matter
+        doc.append(NoEscape(r"\frontmatter"))
+
         self.__add_latex_copyright_page__(doc)
 
         self.__add_author_bio_page__(doc)
@@ -162,6 +165,9 @@ class BookDirLaTeXMixin:
             return ""
 
     def __add_chapters_to_latex_document__(self, doc: Document):
+        # Switch to main matter with arabic numerals
+        doc.append(NoEscape(r"\mainmatter"))
+
         chapters = sorted(self.gen_chapter_docs(), key=lambda ch: ch.number)
 
         for chapter_doc in chapters:
