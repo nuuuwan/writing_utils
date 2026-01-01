@@ -100,7 +100,7 @@ class BookDirLaTeXMixin:
         doc.preamble.append(Command("author", "By " + data.AUTHOR))
 
         date_and_wordcount = NoEscape(
-            r"\small{2025-12-31}"
+            rf"\small{data.DATE}"
             + r"\\"
             + r"\vspace{1em}"
             + rf"\small{{{word_count:,} words}}"
@@ -123,7 +123,11 @@ class BookDirLaTeXMixin:
         doc.append(NoEscape(r"\vspace*{\fill}"))
         doc.append(NoEscape(r"\begin{center}"))
         copyright_line = (
-            r"Copyright \textcopyright\ 2025 by " + data.AUTHOR + r"\\"
+            r"Copyright \textcopyright\ "
+            + data.YEAR
+            + r" by "
+            + data.AUTHOR
+            + r"\\"
         )
         doc.append(NoEscape(copyright_line))
         doc.append(NoEscape(r"\vspace{1em}"))
