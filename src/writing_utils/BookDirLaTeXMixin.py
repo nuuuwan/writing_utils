@@ -110,14 +110,12 @@ class BookDirLaTeXMixin:
         doc.append(NoEscape(r"\maketitle"))
         doc.append(NoEscape(r"\newpage"))
 
-        # Switch to roman numerals for front matter
-        doc.append(NoEscape(r"\frontmatter"))
-
         self.__add_latex_copyright_page__(doc)
 
         self.__add_author_bio_page__(doc)
         self.__add_book_description_page__(doc)
 
+        doc.append(NoEscape(r"\addcontentsline{toc}{chapter}{Contents}"))
         doc.append(NoEscape(r"\tableofcontents"))
         doc.append(NoEscape(r"\newpage"))
 
@@ -142,9 +140,7 @@ class BookDirLaTeXMixin:
     def __add_book_description_page__(self, doc: Document):
         description = self.__load_tex_file__("private/about_the_book.tex")
         doc.append(NoEscape(description))
-        doc.append(
-            NoEscape(r"\addcontentsline{toc}{chapter}{About the Book}")
-        )
+        doc.append(NoEscape(r"\addcontentsline{toc}{chapter}{About the Book}"))
 
     def __add_author_bio_page__(self, doc: Document):
         bio = self.__load_tex_file__("private/about_the_author.tex")
@@ -165,9 +161,6 @@ class BookDirLaTeXMixin:
             return ""
 
     def __add_chapters_to_latex_document__(self, doc: Document):
-        # Switch to main matter with arabic numerals
-        doc.append(NoEscape(r"\mainmatter"))
-
         chapters = sorted(self.gen_chapter_docs(), key=lambda ch: ch.number)
 
         for chapter_doc in chapters:
@@ -232,9 +225,7 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_quotes__(content: str) -> str:
-        content = re.sub(
-            r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL
-        )
+        content = re.sub(r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL)
         return content
 
     @staticmethod
