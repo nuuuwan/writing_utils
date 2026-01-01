@@ -87,6 +87,7 @@ class ChapterFile(File):
         line = line.strip()
         line = line.replace("***", "---")
         line = re.sub(r"[“”]", '"', line)
+        line = line.replace("’", "'")
         return line
 
     @staticmethod
