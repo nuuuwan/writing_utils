@@ -100,7 +100,7 @@ class BookDirLaTeXMixin:
         doc.preamble.append(Command("author", "By " + data.AUTHOR))
 
         date_and_wordcount = NoEscape(
-            rf"\small{data.DATE}"
+            rf"\small{{{data.DATE}}}"
             + r"\\"
             + r"\vspace{1em}"
             + rf"\small{{{word_count:,} words}}"
