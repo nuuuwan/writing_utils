@@ -26,4 +26,5 @@ if __name__ == "__main__":
     # latex
     latex_path = book_dir.build_latex()
     pdf_path = latex_path[:-4] + ".pdf"
-    os.system(f'open "{pdf_path}"')
+    os.system("killall -q Preview")
+    os.system(f'open -a Preview "{pdf_path}"')
