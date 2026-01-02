@@ -94,7 +94,7 @@ class BookDirLaTeXMixin:
         )
         doc.preamble.append(NoEscape(say_command))
         doc.preamble.append(NoEscape(r"\let\cleardoublepage\clearpage"))
-        doc.preamble.append(NoEscape(r"\usepackage{hyperref}"))
+        doc.preamble.append(NoEscape(r"\usepackage[hidelinks]{hyperref}"))
 
     def __add_latex_title_page__(self, doc: Document, word_count: int):
 
