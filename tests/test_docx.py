@@ -140,7 +140,7 @@ And the whole mob join in a rowdy chorus---loud as ever, and completely off key:
         book_dir1 = BookDir(self.dir_book)
         book_dir1.clean_and_write_all()
 
-        latex_file_path = book_dir1.build_latex()
+        latex_file_path = book_dir1.build_latex(say_color="Red")
         self.assertTrue(
             os.path.exists(latex_file_path), "LaTeX file was not created"
         )

@@ -24,6 +24,6 @@ if __name__ == "__main__":
     assert book_dir == book_dir3
 
     # latex
-    latex_path = book_dir.build_latex()
+    latex_path = book_dir.build_latex(say_color="Black")
     pdf_path = latex_path[:-4] + ".pdf"
     os.system(f'open -a Preview "{pdf_path}"')

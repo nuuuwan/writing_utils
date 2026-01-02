@@ -16,7 +16,7 @@ class BookDirLaTeXMixin:
         pdf_path = os.path.join(latex_dir, "book.pdf")
         os.system(f'open "{pdf_path}"')
 
-    def build_latex(self) -> str:
+    def build_latex(self, say_color) -> str:
         latex_dir = self.__create_latex_directory__()
         output_path = os.path.join(latex_dir, "book")
 
@@ -27,7 +27,7 @@ class BookDirLaTeXMixin:
             len(" ".join(ch.lines[1:]).split()) for ch in chapters
         )
 
-        doc = self.__create_latex_document__(word_count)
+        doc = self.__create_latex_document__(word_count, say_color)
         self.__add_chapters_to_latex_document__(doc)
 
         doc.generate_pdf(output_path, clean_tex=False)
@@ -40,17 +40,19 @@ class BookDirLaTeXMixin:
         os.makedirs(latex_dir, exist_ok=True)
         return latex_dir
 
-    def __create_latex_document__(self, word_count: int) -> Document:
+    def __create_latex_document__(
+        self, word_count: int, say_color: str
+    ) -> Document:
         doc = Document(
             documentclass="book", document_options=["a4paper", "12pt"]
         )
 
-        self.__configure_latex_page_layout__(doc)
+        self.__configure_latex_page_layout__(doc, say_color)
         self.__add_latex_title_page__(doc, word_count)
 
         return doc
 
-    def __configure_latex_page_layout__(self, doc: Document):
+    def __configure_latex_page_layout__(self, doc: Document, say_color: str):
         doc.preamble.append(NoEscape(r"\usepackage[margin=1in]{geometry}"))
         doc.preamble.append(NoEscape(r"\usepackage{mathpazo}"))
         doc.preamble.append(NoEscape(r"\usepackage{setspace}"))
@@ -87,7 +89,9 @@ class BookDirLaTeXMixin:
         )
         doc.preamble.append(NoEscape(sectionbreak_command))
 
-        say_command = r"\newcommand{\say}[1]{{\color{Maroon}\enquote{#1}}}"
+        say_command = (
+            r"\newcommand{\say}[1]{{\color{" + say_color + r"}\enquote{#1}}}"
+        )
         doc.preamble.append(NoEscape(say_command))
         doc.preamble.append(NoEscape(r"\let\cleardoublepage\clearpage"))
         doc.preamble.append(NoEscape(r"\usepackage{hyperref}"))
