@@ -120,7 +120,6 @@ class BookDirLaTeXMixin:
         self.__add_book_description_page__(doc)
 
         doc.append(NoEscape(r"\newpage"))
-        doc.append(NoEscape(r"\addcontentsline{toc}{chapter}{Contents}"))
         doc.append(NoEscape(r"\tableofcontents"))
         doc.append(NoEscape(r"\newpage"))
 
@@ -145,16 +144,10 @@ class BookDirLaTeXMixin:
     def __add_book_description_page__(self, doc: Document):
         description = self.__load_tex_file__("private/about_the_book.tex")
         doc.append(NoEscape(description))
-        doc.append(
-            NoEscape(r"\addcontentsline{toc}{chapter}{About the Book}")
-        )
 
     def __add_author_bio_page__(self, doc: Document):
         bio = self.__load_tex_file__("private/about_the_author.tex")
         doc.append(NoEscape(bio))
-        doc.append(
-            NoEscape(r"\addcontentsline{toc}{chapter}{About the Author}")
-        )
 
     @staticmethod
     def __load_tex_file__(file_path: str) -> str:
