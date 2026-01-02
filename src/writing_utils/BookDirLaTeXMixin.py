@@ -68,7 +68,7 @@ class BookDirLaTeXMixin:
             NoEscape(r"\fancyhead[R]{\textit{" + data.TITLE + r"}}")
         )
         doc.preamble.append(NoEscape(r"\fancyfoot[C]{\thepage}"))
-        doc.preamble.append(NoEscape(r"\renewcommand{\headrulewidth}{0.5pt}"))
+        doc.preamble.append(NoEscape(r"\renewcommand{\headrulewidth}{0pt}"))
         doc.preamble.append(
             NoEscape(r"\renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}")
         )
@@ -226,9 +226,7 @@ class BookDirLaTeXMixin:
 
     @staticmethod
     def __convert_quotes__(content: str) -> str:
-        content = re.sub(
-            r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL
-        )
+        content = re.sub(r'"([^"]*?)"', r"\\say{\1}", content, flags=re.DOTALL)
         return content
 
     @staticmethod
