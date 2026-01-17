@@ -6,6 +6,7 @@ from typing import Generator
 
 from utils import FileOrDirectory, Log, Time, TimeFormat
 
+from private.data import DIR_WRITING_DEFAULT_PROJECT_DIR
 from writing_utils.BookDirDocXMixin import BookDirDocXMixin
 from writing_utils.BookDirLaTeXMixin import BookDirLaTeXMixin
 from writing_utils.BookDirMarkdownMixin import BookDirMarkdownMixin
@@ -32,7 +33,7 @@ class BookDir(
             if len(sys.argv) > 1
             and os.path.exists(sys.argv[1])
             and os.path.isdir(sys.argv[1])
-            else os.environ["DIR_WRITING_DEFAULT_PROJECT_DIR"]
+            else DIR_WRITING_DEFAULT_PROJECT_DIR
         )
 
     # Data Access
