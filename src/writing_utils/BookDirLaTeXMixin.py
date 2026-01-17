@@ -61,13 +61,17 @@ class BookDirLaTeXMixin:
         doc.preamble.append(NoEscape(r"\usepackage{fancyhdr}"))
         doc.preamble.append(NoEscape(r"\pagestyle{fancy}"))
         doc.preamble.append(NoEscape(r"\fancyhf{}"))
+
         doc.preamble.append(
-            NoEscape(r"\fancyhead[L]{\textit{\nouppercase{\leftmark}}}")
+            NoEscape(r"\fancyhf[EHC]{\textit{" + data.TITLE + r"}}")
         )
         doc.preamble.append(
-            NoEscape(r"\fancyhead[R]{\textit{" + data.TITLE + r"}}")
+            NoEscape(r"\fancyhf[OHC]{\textit{\nouppercase{\leftmark}}}")
         )
-        doc.preamble.append(NoEscape(r"\fancyfoot[C]{\thepage}"))
+
+        doc.preamble.append(NoEscape(r"\fancyhf[EHL]{\thepage}"))
+        doc.preamble.append(NoEscape(r"\fancyhf[OHR]{\thepage}"))
+
         doc.preamble.append(NoEscape(r"\renewcommand{\headrulewidth}{0pt}"))
         doc.preamble.append(
             NoEscape(r"\renewcommand{\chaptermark}[1]{\markboth{#1}{#1}}")
