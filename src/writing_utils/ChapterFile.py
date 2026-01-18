@@ -85,6 +85,7 @@ class ChapterFile(File):
     @staticmethod
     def __clean_line__(line: str) -> str:
         line = line.strip()
+        line = line.replace("_", "*")
         line = line.replace("***", "---")
         line = re.sub(r"[“”]", '"', line)
         line = line.replace("’", "'")
